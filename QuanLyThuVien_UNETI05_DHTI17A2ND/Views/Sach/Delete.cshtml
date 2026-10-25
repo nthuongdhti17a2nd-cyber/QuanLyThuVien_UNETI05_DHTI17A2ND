@@ -1,0 +1,41 @@
+﻿@* 
+// Họ và tên: Vũ Ngọc Dung
+// Mã sinh viên: 23203100033
+// Nội dung thực hiện: Xây dựng Controller Quản lý Sách, tích hợp tính năng Tìm kiếm, Lọc thể loại, Sắp xếp, Phân trang và Quản lý hình ảnh sách.
+*@
+@model QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.Sach
+
+@{
+    ViewData["Title"] = "Xóa Sách";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">XÁC NHẬN XÓA SÁCH</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-danger font-weight-bold">Bạn có chắc chắn muốn xóa cuốn sách này khỏi hệ thống?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Mã sách:</dt>
+                    <dd class="col-sm-8">@Model.MaSach</dd>
+                    <dt class="col-sm-4">Tên sách:</dt>
+                    <dd class="col-sm-8"><strong>@Model.TenSach</strong></dd>
+                    <dt class="col-sm-4">Tác giả:</dt>
+                    <dd class="col-sm-8">@Model.TacGia</dd>
+                    <dt class="col-sm-4">Thể loại:</dt>
+                    <dd class="col-sm-8">@(Model.TheLoai?.TenTheLoai ?? "N/A")</dd>
+                </dl>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="MaSach" />
+                    <div class="d-flex justify-content-between mt-3">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger">Xóa luôn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

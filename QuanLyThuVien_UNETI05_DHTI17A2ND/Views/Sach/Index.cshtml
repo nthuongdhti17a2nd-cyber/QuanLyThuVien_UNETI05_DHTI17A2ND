@@ -1,0 +1,273 @@
+﻿@* 
+// Họ và tên: Vũ Ngọc Dung
+// Mã sinh viên: 23203100033
+// Nội dung thực hiện: Xây dựng Controller Quản lý Sách, tích hợp tính năng Tìm kiếm, Lọc thể loại, Sắp xếp, Phân trang và Quản lý hình ảnh sách.
+*@
+
+@model IEnumerable<QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.Sach>
+
+@{
+    bool isAdmin = Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin";
+    ViewData["Title"] = isAdmin ? "Quản lý sách" : "Tra cứu, mượn/mua sách";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string searchString = ViewBag.SearchString as string ?? "";
+    int? maTheLoaiSelected = ViewBag.MaTheLoaiSelected as int?;
+    string currentSort = ViewBag.CurrentSort as string ?? "";
+}
+
+<style>
+    .card-book-3d {
+        background: #ffffff;
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    .card-book-3d:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+    }
+
+    .book-cover-wrapper {
+        position: relative;
+        height: 200px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .badge-category {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(33, 37, 41, 0.85);
+        color: #fff;
+        backdrop-filter: blur(5px);
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        z-index: 2;
+    }
+
+    .price-tag {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #dc3545;
+    }
+
+    .btn-action-custom {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .title-box-white {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 10px 24px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+
+<div class="container my-4">
+    <!-- KHU VỰC TIÊU ĐỀ KHUNG TRẮNG -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            @if (isAdmin)
+            {
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm rounded-pill px-3 py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Trang quản trị
+                </a>
+                <div class="title-box-white">
+                    <h3 class="m-0 text-primary fw-extrabold text-uppercase">
+                        <i class="bi bi-journal-bookmark-fill me-2"></i> QUẢN LÝ SÁCH
+                    </h3>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm rounded-pill px-3 py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Trang chủ
+                </a>
+                <div class="title-box-white">
+                    <h3 class="m-0 text-success fw-extrabold text-uppercase">
+                        <i class="bi bi-book-half me-2"></i> TRA CỨU, MƯỢN/MUA SÁCH
+                    </h3>
+                </div>
+            }
+        </div>
+
+        @if (isAdmin)
+        {
+            <a asp-action="Create" class="btn btn-success fw-bold shadow-sm rounded-3 px-4 py-2">
+                <i class="bi bi-plus-lg me-1"></i> Thêm sách mới
+            </a>
+        }
+    </div>
+
+    <!-- KHUNG TÌM KIẾM & LỌC SÁCH (ĐÃ SỬA CHUẨN XÁC NGUYÊN BẢN) -->
+    <div class="card shadow-sm p-3 mb-4 border-0 rounded-4 bg-white">
+        <form action="/Sach" method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                    <input type="text" name="searchString" value="@searchString" class="form-control bg-light border-0" placeholder="Nhập tên sách, tác giả..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="maTheLoai" class="form-select bg-light border-0">
+                    <option value="">-- Tất cả thể loại --</option>
+                    @if (ViewBag.MaTheLoai != null)
+                    {
+                        foreach (var item in (SelectList)ViewBag.MaTheLoai)
+                        {
+                            if (maTheLoaiSelected.HasValue && maTheLoaiSelected.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="sortOrder" class="form-select bg-light border-0">
+                    <option value="" selected="@(string.IsNullOrEmpty(currentSort))">Tên A → Z</option>
+                    <option value="name_desc" selected="@(currentSort == "name_desc")">Tên Z → A</option>
+                    <option value="Price" selected="@(currentSort == "Price")">Giá thấp → cao</option>
+                    <option value="price_desc" selected="@(currentSort == "price_desc")">Giá cao → thấp</option>
+                    <option value="Year" selected="@(currentSort == "Year")">Năm XB mới nhất</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-success fw-bold flex-grow-1 rounded-3">Lọc</button>
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-3">Tải lại</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- DANH SÁCH SÁCH BÀY THẺ 3D (30 SÁCH/TRANG) -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4 mb-5">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card card-book-3d h-100">
+                        <div class="book-cover-wrapper">
+                            <span class="badge badge-category">@(item.TheLoai?.TenTheLoai ?? "Khác")</span>
+
+                            <!-- HIỂN THỊ ẢNH BÌA: TƯƠNG THÍCH CẢ LINK ONLINE VÀ ẢNH CỤC BỘ -->
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                @if (item.HinhAnh.StartsWith("http"))
+                                {
+                                    <img src="@item.HinhAnh" alt="@item.TenSach" class="w-100 h-100" style="object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/sach/@item.HinhAnh" alt="@item.TenSach" class="w-100 h-100" style="object-fit: cover;" />
+                                }
+                            }
+                            else
+                            {
+                                <i class="bi bi-book text-success display-1"></i>
+                            }
+                        </div>
+
+                        <div class="card-body d-flex flex-column p-3">
+                            <h6 class="card-title fw-bold text-dark text-truncate mb-1" title="@item.TenSach">@item.TenSach</h6>
+                            <p class="text-muted small mb-2 text-truncate">Tác giả: @item.TacGia</p>
+
+                            <div class="d-flex justify-content-between align-items-end mb-3">
+                                <div>
+                                    <span class="text-muted small d-block" style="font-size: 0.75rem;">Giá bìa sách:</span>
+                                    <span class="price-tag">@item.GiaSach.ToString("N0") VNĐ</span>
+                                </div>
+                                <span class="badge @(item.SoLuongCon > 0 ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger") fw-bold">
+                                    @(item.SoLuongCon > 0 ? $"Còn: {item.SoLuongCon}" : "Hết sách")
+                                </span>
+                            </div>
+
+                            <div class="mt-auto d-flex flex-column gap-2">
+                                <a asp-action="Details" asp-route-id="@item.MaSach" class="btn btn-light btn-action-custom text-dark text-center border">
+                                    <i class="bi bi-eye me-1"></i> Xem chi tiết
+                                </a>
+
+                                @if (Context.Session.GetString("TenDangNhap") != null && !isAdmin)
+                                {
+                                    <div class="d-flex gap-1">
+                                        <a asp-controller="PhieuMuon" asp-action="TaoPhieuMuon" asp-route-id="@item.MaSach"
+                                           class="btn btn-success btn-action-custom flex-grow-1 @(item.SoLuongCon <= 0 ? "disabled" : "")">
+                                            Mượn
+                                        </a>
+                                        <a asp-controller="PhieuMuon" asp-action="TaoPhieuMua" asp-route-id="@item.MaSach"
+                                           class="btn btn-warning text-dark btn-action-custom flex-grow-1 @(item.SoLuongCon <= 0 ? "disabled" : "")">
+                                            Mua
+                                        </a>
+                                    </div>
+                                }
+
+                                @if (isAdmin)
+                                {
+                                    <div class="d-flex gap-1 pt-1 border-top">
+                                        <a asp-action="Edit" asp-route-id="@item.MaSach" class="btn btn-sm btn-outline-primary flex-grow-1 rounded-2">Sửa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.MaSach" class="btn btn-sm btn-outline-danger flex-grow-1 rounded-2">Xóa</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Không tìm thấy sách nào phù hợp trong thư viện.</p>
+            </div>
+        }
+    </div>
+
+    <!-- THANH PHÂN TRANG -->
+    @if (totalPages > 1)
+    {
+        <div class="d-flex justify-content-center">
+            <nav>
+                <ul class="pagination shadow-sm rounded-pill overflow-hidden">
+                    <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@(pageNumber - 1)"
+                           asp-route-searchString="@searchString" asp-route-maTheLoai="@maTheLoaiSelected" asp-route-sortOrder="@currentSort">
+                            <i class="bi bi-chevron-left"></i> Trang trước
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == pageNumber ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
+                               asp-route-searchString="@searchString" asp-route-maTheLoai="@maTheLoaiSelected" asp-route-sortOrder="@currentSort">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@(pageNumber - 1 + 2)"
+                           asp-route-searchString="@searchString" asp-route-maTheLoai="@maTheLoaiSelected" asp-route-sortOrder="@currentSort">
+                            Trang sau <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+</div>

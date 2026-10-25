@@ -1,0 +1,117 @@
+﻿@* 
+// Họ và tên: Vũ Ngọc Dung
+// Mã sinh viên: 23203100033
+// Nội dung thực hiện: Xây dựng Controller Quản lý Sách, tích hợp tính năng Tìm kiếm, Lọc thể loại, Sắp xếp, Phân trang và Quản lý hình ảnh sách.
+*@
+
+@model QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.Sach
+
+@{
+    ViewData["Title"] = "Chi tiết cuốn sách: " + Model.TenSach;
+    bool isAdmin = Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin";
+
+    // XỬ LÝ ĐƯỜNG DẪN HÌNH ẢNH CHUẨN ĐỒNG BỘ 100% VỚI TRANG INDEX
+    string imageSrc = "https://picsum.photos/id/24/500/300"; // Ảnh mặc định dự phòng
+    if (!string.IsNullOrEmpty(Model.HinhAnh))
+    {
+        if (Model.HinhAnh.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        {
+            imageSrc = Model.HinhAnh; // Nếu là link online (như ảnh Agent Valorant)
+        }
+        else
+        {
+            imageSrc = Url.Content("~/images/sach/" + Model.HinhAnh); // Nếu là ảnh cục bộ trong thư mục
+        }
+    }
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 text-uppercase fw-bold"><i class="bi bi-book-half me-2 text-warning"></i>CHI TIẾT CUỐN SÁCH</h4>
+                    <span class="badge bg-warning text-dark fs-6 px-3 py-2 rounded-pill fw-bold">
+                        @(Model.TheLoai?.TenTheLoai ?? "Chưa phân loại")
+                    </span>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <div class="row g-4 align-items-center">
+
+                        <!-- KHU VỰC HIỂN THỊ HÌNH ẢNH BÌA SÁCH (ĐỒNG BỘ 100% VỚI INDEX) -->
+                        <div class="col-md-5 text-center">
+                            <div class="p-2 bg-light rounded-4 border shadow-sm d-flex align-items-center justify-content-center overflow-hidden" style="min-height: 320px;">
+                                <img src="@imageSrc"
+                                     alt="@Model.TenSach"
+                                     class="img-fluid rounded-3 shadow-sm"
+                                     style="max-height: 350px; width: 100%; object-fit: contain;" />
+                            </div>
+                        </div>
+
+                        <!-- KHU VỰC THÔNG TIN SÁCH -->
+                        <div class="col-md-7">
+                            <h2 class="fw-extrabold text-dark mb-2">@Model.TenSach</h2>
+                            <p class="fs-5 text-muted mb-4"><i class="bi bi-person-fill text-primary me-1"></i>Tác giả: <span class="fw-bold text-dark">@Model.TacGia</span></p>
+
+                            <div class="bg-light p-3 rounded-3 border mb-4">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="text-muted small">Giá bìa sách:</div>
+                                        <div class="fs-4 fw-bold text-danger">@Model.GiaSach.ToString("N0") VNĐ</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Tình trạng kho:</div>
+                                        <div>
+                                            @if (Model.SoLuongCon > 0)
+                                            {
+                                                <span class="badge bg-success-subtle text-success fs-6 fw-bold">Còn @Model.SoLuongCon / @Model.SoLuong cuốn</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger fs-6 fw-bold">Tạm hết sách</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Nhà xuất bản:</div>
+                                        <div class="fw-bold text-dark">@(string.IsNullOrEmpty(Model.NhaXuatBan) ? "Đang cập nhật" : Model.NhaXuatBan)</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Năm xuất bản:</div>
+                                        <div class="fw-bold text-dark">@Model.NamXuatBan</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- NÚT THAO TÁC -->
+                            <div class="d-flex flex-wrap gap-2 pt-2">
+                                <a asp-action="Index" class="btn btn-secondary rounded-pill px-4 fw-bold shadow-sm">
+                                    <i class="bi bi-arrow-left me-1"></i> Quay lại
+                                </a>
+
+                                @if (Context.Session.GetString("TenDangNhap") != null && !isAdmin)
+                                {
+                                    <a asp-controller="PhieuMuon" asp-action="TaoPhieuMuon" asp-route-id="@Model.MaSach"
+                                       class="btn btn-success rounded-pill px-4 fw-bold shadow @(Model.SoLuongCon <= 0 ? "disabled" : "")">
+                                        <i class="bi bi-journal-plus me-1"></i> Đăng ký mượn
+                                    </a>
+                                    <a asp-controller="PhieuMuon" asp-action="TaoPhieuMua" asp-route-id="@Model.MaSach"
+                                       class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow @(Model.SoLuongCon <= 0 ? "disabled" : "")">
+                                        <i class="bi bi-cart-plus me-1"></i> Đăng ký mua
+                                    </a>
+                                }
+
+                                @if (isAdmin)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@Model.MaSach" class="btn btn-primary rounded-pill px-4 fw-bold shadow">
+                                        <i class="bi bi-pencil-square me-1"></i> Cập nhật
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
