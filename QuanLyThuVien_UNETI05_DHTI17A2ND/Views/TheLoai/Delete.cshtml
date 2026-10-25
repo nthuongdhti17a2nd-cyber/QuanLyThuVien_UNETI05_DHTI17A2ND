@@ -1,0 +1,39 @@
+﻿@* 
+// Họ và tên: Phạm Thị Thùy Linh
+// Mã sinh viên: 23103100005
+// Nội dung thực hiện: Xây dựng Controller Quản lý Tài khoản, Đăng nhập, Phân quyền hệ thống, Quản lý Thể loại sách và Dịch vụ gửi Email tự động.
+*@
+@model QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.TheLoai
+
+@{
+    ViewData["Title"] = "Xóa Thể loại";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">XÁC NHẬN XÓA THỂ LOẠI</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-danger font-weight-bold">Bạn có chắc chắn muốn xóa thể loại sách này không?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Mã thể loại:</dt>
+                    <dd class="col-sm-8">@Model.MaTheLoai</dd>
+                    <dt class="col-sm-4">Tên thể loại:</dt>
+                    <dd class="col-sm-8"><strong>@Model.TenTheLoai</strong></dd>
+                    <dt class="col-sm-4">Mô tả:</dt>
+                    <dd class="col-sm-8">@Model.MoTa</dd>
+                </dl>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="MaTheLoai" />
+                    <div class="d-flex justify-content-between mt-3">
+                        <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger">Xóa luôn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

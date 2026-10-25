@@ -1,0 +1,40 @@
+﻿@* 
+// Họ và tên: Phạm Thị Thùy Linh
+// Mã sinh viên: 23103100005
+// Nội dung thực hiện: Xây dựng Controller Quản lý Tài khoản, Đăng nhập, Phân quyền hệ thống, Quản lý Thể loại sách và Dịch vụ gửi Email tự động.
+*@
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 450px;">
+    <div class="card shadow-lg border-0 rounded-lg" style="background: rgba(255, 255, 255, 0.98);">
+        <div class="card-header bg-success text-white text-center py-3">
+            <h4 class="mb-0 font-weight-bold">ĐĂNG NHẬP HỆ THỐNG</h4>
+        </div>
+        <div class="card-body p-4">
+
+            <!-- ĐÃ BỎ TOÀN BỘ THÔNG BÁO TEMP DATA & VIEWBAG ERROR TẠI ĐÂY -->
+
+            <form asp-controller="Account" asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Tên đăng nhập</label>
+                    <input type="text" name="tenDangNhap" class="form-control" required placeholder="Nhập tên đăng nhập..." />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Mật khẩu</label>
+                    <input type="password" name="matKhau" class="form-control" required placeholder="Nhập mật khẩu..." />
+                </div>
+                <button type="submit" class="btn btn-success w-100 font-weight-bold py-2 mt-2">ĐĂNG NHẬP</button>
+            </form>
+
+            <div class="text-center mt-3 small">
+                <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Chưa có tài khoản? Đăng ký</a> |
+                <a asp-controller="Account" asp-action="ForgotPassword" class="text-decoration-none">Quên mật khẩu?</a>
+            </div>
+        </div>
+    </div>
+</div>
