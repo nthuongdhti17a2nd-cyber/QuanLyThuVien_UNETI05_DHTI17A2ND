@@ -1,0 +1,57 @@
+﻿@*@* 
+// Họ và tên: Phạm Thị Thùy Linh
+// Mã sinh viên: 23103100005
+// Nội dung thực hiện: Xây dựng Controller Quản lý Tài khoản, Đăng nhập, Phân quyền hệ thống, Quản lý Thể loại sách và Dịch vụ gửi Email tự động.
+*@
+@{
+    ViewData["Title"] = "Đăng ký Tài khoản";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h3 class="fw-bold mb-0"><i class="bi bi-person-plus-fill me-2"></i>ĐĂNG KÝ TÀI KHOẢN ĐỘC GIẢ</h3>
+                </div>
+                <div class="card-body p-4">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+                    }
+
+                    <form asp-action="Register" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Họ và tên</label>
+                            <input type="text" name="hoTen" class="form-control" placeholder="" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Số điện thoại</label>
+                            <input type="tel" name="soDienThoai" class="form-control" placeholder="" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tên đăng nhập</label>
+                            <input type="text" name="tenDangNhap" class="form-control" placeholder="" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Mật khẩu</label>
+                            <input type="password" name="matKhau" class="form-control" placeholder="" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 mt-2">
+                            <i class="bi bi-check-circle me-1"></i> Đăng Ký Ngay
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="Login" class="text-decoration-none text-primary">Đã có tài khoản? Đăng nhập</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
