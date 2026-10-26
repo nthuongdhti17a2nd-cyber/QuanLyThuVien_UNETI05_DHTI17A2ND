@@ -1,0 +1,58 @@
+﻿@model QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.PhieuMuon
+
+@{
+    ViewData["Title"] = "Xóa Phiếu Mượn";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>XÁC NHẬN XÓA PHIẾU MƯỢN</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa phiếu mượn này khỏi lịch sử?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Mã phiếu:</dt>
+                    <dd class="col-sm-8 fw-bold text-primary">PM-@Model.MaPhieuMuon</dd>
+
+                    <dt class="col-sm-4">Độc giả:</dt>
+                    <dd class="col-sm-8"><strong>@(Model.DocGia?.HoTen ?? "N/A")</strong></dd>
+
+                    <dt class="col-sm-4">Sách mượn:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.ChiTietPhieuMuons != null && Model.ChiTietPhieuMuons.Any())
+                        {
+                            <ul class="mb-0 ps-3">
+                                @foreach (var ct in Model.ChiTietPhieuMuons)
+                                {
+                                    <li><span class="fw-bold">@(ct.Sach?.TenSach ?? "Sách đã xóa")</span> (SL: @ct.SoLuongMuon)</li>
+                                }
+                            </ul>
+                        }
+                        else if (Model.Sach != null)
+                        {
+                            <strong>@Model.Sach.TenSach</strong>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Không có thông tin sách</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Trạng thái:</dt>
+                    <dd class="col-sm-8"><span class="badge bg-secondary">@Model.TrangThai</span></dd>
+                </dl>
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaPhieuMuon" />
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary fw-bold px-4">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger fw-bold px-4">Xóa luôn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

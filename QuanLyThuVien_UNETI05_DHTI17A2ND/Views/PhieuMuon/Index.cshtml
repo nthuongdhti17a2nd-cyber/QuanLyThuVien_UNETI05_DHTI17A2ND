@@ -1,0 +1,182 @@
+﻿@* 
+// Họ và tên: Nguyễn Thị Hương
+// Mã sinh viên: 23103100067
+// Nội dung thực hiện: Xây dựng Controller Dashboard Quản trị, Phân hệ Quản lý mượn trả sách (Duyệt đơn, Trả sách, Hủy phiếu) và Thống kê báo cáo dữ liệu.
+*@
+@model IEnumerable<QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.PhieuMuon>
+
+@{
+    ViewData["Title"] = "Quản lý Mượn/Trả sách";
+}
+
+<div class="container my-4">
+    <!-- TIÊU ĐỀ NỔI BẬT TRÊN NỀN TRẮNG CÓ NÚT QUAY LẠI TRANG QUẢN TRỊ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Trang quản trị
+            </a>
+            <div class="card shadow-sm px-4 py-2 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+                <h2 class="m-0 text-info fw-bold">
+                    <i class="bi bi-card-checklist me-2"></i>QUẢN LÝ MƯỢN / TRẢ SÁCH
+                </h2>
+            </div>
+        </div>
+
+        @if (Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin")
+        {
+            <a asp-action="Create" class="btn btn-info text-white fw-bold shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Lập phiếu mượn mới
+            </a>
+        }
+    </div>
+
+    <!-- THÔNG BÁO TỪ TEMPDATA -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show fw-bold" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show fw-bold" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- KHUNG TÌM KIẾM & LỌC PHIẾU MƯỢN -->
+    <div class="card shadow-sm p-3 mb-4 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm tên độc giả..." />
+            </div>
+            <div class="col-md-4">
+                <select name="trangThai" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="Chờ xác nhận" selected="@(ViewBag.TrangThai == "Chờ xác nhận")">Chờ xác nhận</option>
+                    <option value="Đang mượn" selected="@(ViewBag.TrangThai == "Đang mượn")">Đang mượn</option>
+                    <option value="Đã trả" selected="@(ViewBag.TrangThai == "Đã trả")">Đã trả</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary fw-bold flex-grow-1">
+                    <i class="bi bi-search me-1"></i> Tìm kiếm
+                </button>
+                <a asp-action="Index" class="btn btn-secondary fw-bold">Tải lại</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- BẢNG DANH SÁCH PHIẾU MƯỢN -->
+    <div class="table-responsive card shadow-lg border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-info text-center align-middle">
+                <tr>
+                    <th style="width: 8%;">Mã PM</th>
+                    <th style="width: 20%;">Tên Độc giả</th>
+                    <th style="width: 25%;">Danh sách Sách mượn</th>
+                    <th style="width: 12%;">Ngày Mượn</th>
+                    <th style="width: 12%;">Hạn Trả</th>
+                    <th style="width: 11%;">Trạng Thái</th>
+                    <th style="width: 12%;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center fw-bold">PM-@item.MaPhieuMuon</td>
+                            <td class="fw-bold text-dark">@(item.DocGia?.HoTen ?? "N/A")</td>
+                            <td>
+                                @if (item.ChiTietPhieuMuons != null && item.ChiTietPhieuMuons.Any())
+                                {
+                                    <ul class="mb-0 ps-3">
+                                        @foreach (var ct in item.ChiTietPhieuMuons)
+                                        {
+                                            <li><span class="fw-bold">@(ct.Sach?.TenSach ?? "Sách đã xóa")</span> (SL: @ct.SoLuongMuon)</li>
+                                        }
+                                    </ul>
+                                }
+                                else if (item.Sach != null)
+                                {
+                                    <span>@item.Sach.TenSach</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Không có thông tin sách</span>
+                                }
+                            </td>
+                            <td class="text-center">@item.NgayMuon.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">@item.NgayHenTra.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">
+                                @if (item.TrangThai == "Chờ xác nhận")
+                                {
+                                    <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                }
+                                else if (item.TrangThai == "Đang mượn")
+                                {
+                                    <span class="badge bg-primary">Đang mượn</span>
+                                }
+                                else if (item.TrangThai == "Đã trả")
+                                {
+                                    <span class="badge bg-success">Đã trả</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@item.TrangThai</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                    @if (item.TrangThai == "Chờ xác nhận")
+                                    {
+                                        <form asp-action="DuyetPhieu" asp-route-id="@item.MaPhieuMuon" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-warning btn-sm fw-bold text-dark" onclick="return confirm('Duyệt phiếu mượn này và trừ sách trong kho?');">Duyệt</button>
+                                        </form>
+                                    }
+                                    else if (item.TrangThai == "Đang mượn")
+                                    {
+                                        <form asp-action="TraSach" asp-route-id="@item.MaPhieuMuon" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-success btn-sm fw-bold" onclick="return confirm('Xác nhận độc giả đã trả sách?');">Trả sách</button>
+                                        </form>
+                                    }
+
+                                    <a asp-action="Details" asp-route-id="@item.MaPhieuMuon" class="btn btn-info btn-sm fw-bold text-white">Xem</a>
+                                    <a asp-action="Delete" asp-route-id="@item.MaPhieuMuon" class="btn btn-danger btn-sm fw-bold">Xóa</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted fs-6">Chưa có dữ liệu phiếu mượn nào!</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PHẦN HIỂN THỊ THANH PHÂN TRANG -->
+    @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link fw-bold" href="@Url.Action("Index", new { page = i, searchString = ViewBag.SearchString, trangThai = ViewBag.TrangThai })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

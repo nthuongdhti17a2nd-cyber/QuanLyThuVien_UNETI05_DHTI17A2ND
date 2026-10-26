@@ -1,0 +1,129 @@
+﻿@* 
+// Họ và tên: Nguyễn Thị Hương
+// Mã sinh viên: 23103100067
+// Nội dung thực hiện: Xây dựng Controller Dashboard Quản trị, Phân hệ Quản lý mượn trả sách (Duyệt đơn, Trả sách, Hủy phiếu) và Thống kê báo cáo dữ liệu.
+*@
+@{
+    ViewData["Title"] = "Thống kê & Báo cáo";
+}
+
+<div class="container my-4">
+    <!-- TIÊU ĐỀ NỔI BẬT TRÊN NỀN TRẮNG CÓ NÚT QUAY LẠI TRANG QUẢN TRỊ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Trang quản trị
+            </a>
+            <div class="card shadow-sm px-4 py-2 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+                <h2 class="m-0 text-danger fw-bold">
+                    <i class="bi bi-bar-chart-line-fill me-2"></i>THỐNG KÊ & BÁO CÁO HỆ THỐNG
+                </h2>
+                <p class="text-muted mb-0 small text-center">Tổng quan các chỉ số hoạt động của thư viện.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CÁC THẺ CARD HIỂN THỊ SỐ LIỆU TỔNG QUAN -->
+    <div class="row g-4 mb-4">
+        <!-- TỔNG SỐ SÁCH -->
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow border-0 rounded-3">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-book fs-1 mb-2"></i>
+                    <h5 class="card-title fw-bold">TỔNG SỐ SÁCH</h5>
+                    <p class="display-5 fw-bold mb-0">@ViewBag.TongSoSach</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TỔNG ĐỘC GIẢ -->
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow border-0 rounded-3">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-people fs-1 mb-2"></i>
+                    <h5 class="card-title fw-bold">TỔNG ĐỘC GIẢ</h5>
+                    <p class="display-5 fw-bold mb-0">@ViewBag.TongDocGia</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TỔNG PHIẾU MƯỢN -->
+        <div class="col-md-4">
+            <div class="card bg-warning text-dark shadow border-0 rounded-3">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-journal-text fs-1 mb-2"></i>
+                    <h5 class="card-title fw-bold">TỔNG PHIẾU MƯỢN</h5>
+                    <p class="display-5 fw-bold mb-0">@ViewBag.TongPhieuMuon</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHU VỰC HIỂN THỊ BIỂU ĐỒ CỘT TRỰC QUAN -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                <h5 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-bar-chart-fill me-2 text-primary"></i> Biểu đồ trực quan so sánh dữ liệu hệ thống
+                </h5>
+                <div style="position: relative; height: 350px; width: 100%;">
+                    <canvas id="systemBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NHÚNG THƯ VIỆN CHART.JS ĐỂ VẼ BIỂU ĐỒ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('systemBarChart').getContext('2d');
+
+        // Lấy trực tiếp dữ liệu động từ ViewBag sang JavaScript
+        const totalBooks = @(ViewBag.TongSoSach ?? 0);
+        const totalReaders = @(ViewBag.TongDocGia ?? 0);
+        const totalLoans = @(ViewBag.TongPhieuMuon ?? 0);
+
+        new Chart(ctx, {
+            type: 'bar', // Kiểu biểu đồ cột
+            data: {
+                labels: ['Tổng số sách', 'Tổng độc giả', 'Tổng phiếu mượn'],
+                datasets: [{
+                    label: 'Số lượng thực tế',
+                    data: [totalBooks, totalReaders, totalLoans],
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.85)',  // Xanh dương (Sách)
+                        'rgba(25, 135, 84, 0.85)',   // Xanh lá (Độc giả)
+                        'rgba(255, 193, 7, 0.85)'    // Vàng cam (Phiếu mượn)
+                    ],
+                    borderColor: [
+                        'rgb(13, 110, 253)',
+                        'rgb(25, 135, 84)',
+                        'rgb(255, 193, 7)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0 // Đảm bảo số đếm hiển thị dạng số nguyên
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Ẩn nhãn thừa vì các cột đã có tên ở trục X rất rõ ràng
+                    }
+                }
+            }
+        });
+    });
+</script>

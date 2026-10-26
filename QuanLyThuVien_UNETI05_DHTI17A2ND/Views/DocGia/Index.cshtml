@@ -1,0 +1,101 @@
+﻿@* 
+// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Xây dựng Controller Quản lý Độc giả, Giỏ hàng đa sản phẩm, Form đăng ký mượn/mua sách trực tuyến và hỗ trợ reset mật khẩu.
+*@
+
+@model IEnumerable<QuanLyThuVien_UNETI05_DHTI17A2ND.Models.DocGia>
+
+@{
+    ViewData["Title"] = "Quản lý Độc giả";
+}
+
+<div class="container my-4">
+    <!-- TIÊU ĐỀ NỔI BẬT TRÊN NỀN TRẮNG CÓ NÚT QUAY LẠI TRANG QUẢN TRỊ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Trang quản trị
+            </a>
+            <div class="card shadow-sm px-4 py-2 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+                <h2 class="m-0 text-primary fw-bold">
+                    <i class="bi bi-people-fill me-2"></i>QUẢN LÝ ĐỘC GIẢ
+                </h2>
+            </div>
+        </div>
+
+        @if (Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin")
+        {
+            <a asp-action="Create" class="btn btn-success fw-bold shadow-sm">
+                <i class="bi bi-person-plus-fill me-1"></i> Thêm độc giả mới
+            </a>
+        }
+    </div>
+
+    <!-- KHUNG TÌM KIẾM ĐỘC GIẢ -->
+    <div class="card shadow-sm p-3 mb-4 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
+            <div class="col-md-9">
+                <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Nhập tên độc giả, mã độc giả hoặc email để tìm kiếm..." />
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary fw-bold flex-grow-1">
+                    <i class="bi bi-search me-1"></i> Tìm kiếm
+                </button>
+                <a asp-action="Index" class="btn btn-secondary fw-bold">Tải lại</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- BẢNG DANH SÁCH ĐỘC GIẢ -->
+    <div class="table-responsive card shadow-lg border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary text-center align-middle">
+                <tr>
+                    <th style="width: 8%;">Mã ĐG</th>
+                    <th style="width: 20%;">Họ và Tên</th>
+                    <th style="width: 22%;">Email</th>
+                    <th style="width: 15%;">Số điện thoại</th>
+                    <th style="width: 15%;">Địa chỉ</th>
+                    <th style="width: 20%;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center fw-bold text-primary">@item.MaDocGia</td>
+                            <td class="fw-bold text-dark">@item.HoTen</td>
+                            <td>@(string.IsNullOrEmpty(item.Email) ? "—" : item.Email)</td>
+                            <td class="text-center">@(string.IsNullOrEmpty(item.SoDienThoai) ? "—" : item.SoDienThoai)</td>
+                            <td>@(string.IsNullOrEmpty(item.DiaChi) ? "—" : item.DiaChi)</td>
+
+                            <!-- THAO TÁC: ĐÃ BỔ SUNG NÚT XEM CHI TIẾT KÈM ICON -->
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a asp-action="Details" asp-route-id="@item.MaDocGia" class="btn btn-sm btn-info text-white fw-bold shadow-sm" title="Xem chi tiết & Tai khoản">
+                                        <i class="bi bi-eye-fill me-1"></i> Xem
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.MaDocGia" class="btn btn-sm btn-warning text-dark fw-bold shadow-sm">
+                                        <i class="bi bi-pencil-square me-1"></i> Sửa
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.MaDocGia" class="btn btn-sm btn-danger fw-bold shadow-sm">
+                                        <i class="bi bi-trash-fill me-1"></i> Xóa
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted fs-6">Chưa có dữ liệu độc giả nào trong hệ thống.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

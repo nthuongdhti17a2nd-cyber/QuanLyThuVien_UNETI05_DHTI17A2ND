@@ -1,0 +1,79 @@
+﻿@* 
+// Họ và tên: Vũ Ngọc Dung
+// Mã sinh viên: 23203100033
+// Nội dung thực hiện: Xây dựng Controller Quản lý Sách, tích hợp tính năng Tìm kiếm, Lọc thể loại, Sắp xếp, Phân trang và Quản lý hình ảnh sách.
+*@
+
+@model QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models.Sach
+
+@{
+    ViewData["Title"] = "Thêm mới Sách";
+}
+
+<div class="row justify-content-center my-4">
+    <div class="col-md-9 col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-plus-circle me-2"></i>THÊM MỚI SÁCH VÀO THƯ VIỆN</h4>
+            </div>
+            <div class="card-body p-4 bg-light">
+                <!-- BẮT BUỘC BỔ SUNG enctype="multipart/form-data" ĐỂ UPLOAD FILE ÁNH -->
+                <form asp-action="Create" enctype="multipart/form-data" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Tên sách <span class="text-danger">*</span></label>
+                            <input asp-for="TenSach" class="form-control rounded-3" required placeholder="Nhập tên sách..." />
+                            <span asp-validation-for="TenSach" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Thể loại <span class="text-danger">*</span></label>
+                            <select asp-for="MaTheLoai" class="form-select rounded-3" asp-items="ViewBag.MaTheLoai" required>
+                                <option value="">-- Chọn thể loại --</option>
+                            </select>
+                            <span asp-validation-for="MaTheLoai" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Tác giả <span class="text-danger">*</span></label>
+                            <input asp-for="TacGia" class="form-control rounded-3" required placeholder="Nhập tên tác giả..." />
+                            <span asp-validation-for="TacGia" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Nhà xuất bản</label>
+                            <input asp-for="NhaXuatBan" class="form-control rounded-3" placeholder="Nhập NXB..." />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Năm xuất bản</label>
+                            <input asp-for="NamXuatBan" type="number" value="2024" class="form-control rounded-3" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Tổng số lượng <span class="text-danger">*</span></label>
+                            <input asp-for="SoLuong" type="number" value="10" min="1" class="form-control rounded-3" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Giá sách (VNĐ) <span class="text-danger">*</span></label>
+                            <input asp-for="GiaSach" type="number" value="50000" step="1000" class="form-control rounded-3" required />
+                        </div>
+
+                        <!-- Ô CHỌN FILE UPLOAD ẢNH BÌA SÁCH -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold"><i class="bi bi-image me-1"></i>Hình ảnh bìa sách</label>
+                            <input type="file" name="fileAnh" class="form-control rounded-3" accept="image/*" />
+                            <div class="form-text">Nếu không chọn ảnh, hệ thống sẽ tự dùng ảnh mặc định.</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-secondary rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-1"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill px-5 fw-bold shadow">
+                            <i class="bi bi-check-lg me-1"></i> Lưu sách
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
