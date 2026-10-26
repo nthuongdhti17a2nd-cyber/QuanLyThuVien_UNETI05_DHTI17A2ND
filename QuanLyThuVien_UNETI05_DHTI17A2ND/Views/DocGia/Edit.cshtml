@@ -1,0 +1,67 @@
+﻿@* 
+// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Xây dựng Controller Quản lý Độc giả, Giỏ hàng đa sản phẩm, Form đăng ký mượn/mua sách trực tuyến và hỗ trợ reset mật khẩu.
+*@
+@model QuanLyThuVien_UNETI05_DHTI17A2ND.Models.DocGia
+
+@{
+    ViewData["Title"] = "Chỉnh sửa Độc giả";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0 fs-5"><i class="bi bi-pencil-square me-2"></i>SỬA THÔNG TIN ĐỘC GIẢ</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Khóa chính ẩn -->
+                    <input type="hidden" asp-for="MaDocGia" />
+
+                    <div class="mb-3">
+                        <label asp-for="HoTen" class="form-label fw-bold">Họ và tên</label>
+                        <input asp-for="HoTen" class="form-control" required />
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" class="form-control" type="email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SoDienThoai" class="form-label fw-bold">Số điện thoại</label>
+                        <input asp-for="SoDienThoai" class="form-control" />
+                        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DiaChi" class="form-label fw-bold">Địa chỉ</label>
+                        <input asp-for="DiaChi" class="form-control" />
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary fw-bold">
+                            <i class="bi bi-arrow-left me-1"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary fw-bold">
+                            <i class="bi bi-save me-1"></i> Cập nhật
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

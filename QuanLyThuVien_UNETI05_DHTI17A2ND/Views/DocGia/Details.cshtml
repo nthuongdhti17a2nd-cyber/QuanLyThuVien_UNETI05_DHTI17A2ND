@@ -1,0 +1,99 @@
+﻿@* 
+// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Xây dựng Controller Quản lý Độc giả, Giỏ hàng đa sản phẩm, Form đăng ký mượn/mua sách trực tuyến và hỗ trợ reset mật khẩu.
+*@
+
+@model QuanLyThuVien_UNETI05_DHTI17A2ND.Models.DocGia
+
+@{
+    ViewData["Title"] = "Chi tiết độc giả";
+}
+
+<div class="container my-5" style="max-width: 650px;">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="background: rgba(255, 255, 255, 0.96);">
+        <!-- HEADER XANH DƯƠNG NỔI BẬT -->
+        <div class="bg-primary text-white p-3 text-center">
+            <h4 class="m-0 fw-bold text-uppercase">
+                <i class="bi bi-person-lines-fill me-2"></i>THÔNG TIN CHI TIẾT ĐỘC GIẢ
+            </h4>
+        </div>
+
+        <div class="card-body p-4">
+            <!-- THÔNG BÁO THÀNH CÔNG -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show fw-bold text-center mb-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- HỌ VÀ TÊN -->
+            <div class="mb-3">
+                <label class="form-label fw-bold text-muted small">Họ và tên:</label>
+                <input type="text" class="form-control bg-light rounded-3 py-2 fw-bold text-dark fs-6" value="@Model.HoTen" readonly />
+            </div>
+
+            <!-- EMAIL & SỐ ĐIỆN THOẠI -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted small">Email:</label>
+                    <input type="text" class="form-control bg-light rounded-3 py-2" value="@(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)" readonly />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted small">Số điện thoại:</label>
+                    <input type="text" class="form-control bg-light rounded-3 py-2 fw-semibold" value="@(string.IsNullOrEmpty(Model.SoDienThoai) ? "Chưa cập nhật" : Model.SoDienThoai)" readonly />
+                </div>
+            </div>
+
+            <!-- ĐỊA CHỈ -->
+            <div class="mb-3">
+                <label class="form-label fw-bold text-muted small">Địa chỉ:</label>
+                <input type="text" class="form-control bg-light rounded-3 py-2" value="@(string.IsNullOrEmpty(Model.DiaChi) ? "Chưa cập nhật" : Model.DiaChi)" readonly />
+            </div>
+
+            <hr class="my-4 text-muted" />
+
+            <!-- KHU VỰC THÔNG TIN TÀI KHOẢN ĐĂNG NHẬP -->
+            <div class="card bg-warning bg-opacity-10 border-warning rounded-3 p-3 mb-4">
+                <h6 class="fw-bold text-warning-emphasis mb-3">
+                    <i class="bi bi-key-fill me-2"></i>Thông Tin Tài Khoản Đăng Nhập
+                </h6>
+
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark small mb-1">Tên đăng nhập:</label>
+                        <input type="text" class="form-control bg-white rounded-3 py-2 fw-bold text-primary" value="@(Model.TaiKhoan?.TenDangNhap ?? "Chưa tạo tài khoản")" readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark small mb-1">Mật khẩu bảo mật:</label>
+                        <input type="text" class="form-control bg-white rounded-3 py-2 fw-bold text-danger" value="****** (Đã mã hóa SHA256)" readonly />
+                    </div>
+                </div>
+
+                <!-- NÚT RESET MẬT KHẨU TẠI BÀN (CẤP MK = TÊN ĐĂNG NHẬP) -->
+                <div class="pt-2 border-top border-warning d-flex justify-content-end">
+                    <form asp-action="ResetPassword" asp-route-id="@Model.MaDocGia" method="post" onsubmit="return confirm('Xác nhận đặt lại mật khẩu cho độc giả trùng với Tên đăng nhập: @(Model.TaiKhoan?.TenDangNhap)?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger fw-bold rounded-3 px-3 py-2 shadow-sm">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Đặt lại MK (@(Model.TaiKhoan?.TenDangNhap))
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- NÚT THAO TÁC QUAY LẠI & SỬA -->
+            <div class="d-flex justify-content-between align-items-center pt-2">
+                <a asp-action="Index" class="btn btn-secondary fw-bold rounded-3 px-4 py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại
+                </a>
+
+                <a asp-action="Edit" asp-route-id="@Model.MaDocGia" class="btn btn-warning text-dark fw-bold rounded-3 px-4 py-2 shadow-sm">
+                    <i class="bi bi-pencil-square me-1"></i> Sửa thông tin
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
