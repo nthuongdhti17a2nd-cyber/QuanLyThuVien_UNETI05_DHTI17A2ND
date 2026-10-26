@@ -7,45 +7,55 @@
 @model QuanLyThuVien_UNETI05_DHTI17A2ND.Models.PhieuMuon
 
 @{
-    ViewData["Title"] = "Xác nhận mua sách";
+    ViewData["Title"] = "Xác nhận phiếu đăng ký mượn";
     int soLuongCon = Model?.Sach?.SoLuongCon ?? 1;
 }
 
 <div class="container my-5" style="max-width: 600px;">
     <div class="card shadow-lg p-4 border-0 rounded-4" style="background: rgba(255, 255, 255, 0.96);">
-        <h3 class="text-success fw-bold text-center mb-4 text-uppercase">
-            <i class="bi bi-cart-check me-2"></i>XÁC NHẬN MUA SÁCH
+        <h3 class="text-primary fw-extrabold text-center mb-4 text-uppercase">
+            <i class="bi bi-file-earmark-check me-2"></i>XÁC NHẬN ĐĂNG KÝ
         </h3>
 
-        <form id="formMuaSach" asp-action="TaoPhieuMua" method="post">
+        <form id="formMuonSach" asp-action="TaoPhieuMuon" method="post">
             @Html.AntiForgeryToken()
-            <input type="hidden" name="maSach" value="@Model?.MaSach" />
+            <input type="hidden" name="maSach" value="@Model.MaSach" />
 
             <div class="mb-3">
                 <label class="form-label fw-bold text-dark">Tên Sách:</label>
-                <input type="text" class="form-control bg-white rounded-3 py-2 fw-bold text-primary" value="@(Model?.Sach?.TenSach ?? "Chưa rõ thông tin sách")" readonly />
+                <input type="text" class="form-control bg-white rounded-3 py-2 fw-semibold text-primary" value="@Model.Sach?.TenSach" readonly />
             </div>
 
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">Giá Sách:</label>
-                    <input type="text" class="form-control bg-white rounded-3 py-2 text-success fw-bold" value="@((Model?.Sach?.GiaSach ?? 0).ToString("N0")) VNĐ" readonly />
+                    <label class="form-label fw-bold text-dark">Ngày Đăng Ký:</label>
+                    <input type="text" class="form-control bg-white rounded-3 py-2" value="@Model.NgayMuon.ToString("dd/MM/yyyy")" readonly />
                 </div>
+
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">Ngày Đăng Ký Mua:</label>
-                    <input type="text" class="form-control bg-white rounded-3 py-2" value="@(Model?.NgayMuon != default ? Model.NgayMuon.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy"))" readonly />
+                    <label class="form-label fw-bold text-dark">Hẹn Trả:</label>
+                    <select name="ngayHenTra" class="form-select bg-white rounded-3 py-2 text-danger fw-bold cursor-pointer" required>
+                        @for (int i = 1; i <= 14; i++)
+                        {
+                            var ngayHen = DateTime.Now.AddDays(i);
+                            <option value="@ngayHen.ToString("yyyy-MM-dd")" selected="@(i == 14)">
+                                @ngayHen.ToString("dd/MM/yyyy") (@i ngày)
+                            </option>
+                        }
+                    </select>
+                    <div class="form-text text-muted" style="font-size: 11px;">Bấm chọn ngày trả từ 1 đến 14 ngày kể từ hôm nay.</div>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold text-dark">Số Lượng Mua:</label>
-                <input type="number" id="inputSoLuongMua" name="soLuong" value="1" min="1" max="@soLuongCon" class="form-control bg-white rounded-3 py-2 fw-bold text-success" required />
+                <label class="form-label fw-bold text-dark">Số Lượng Mượn:</label>
+                <input type="number" id="inputSoLuong" name="soLuong" value="1" min="1" max="@soLuongCon" class="form-control bg-white rounded-3 py-2 fw-bold text-success" required />
                 <div class="form-text text-muted">Kho hiện còn <strong>@soLuongCon</strong> cuốn.</div>
             </div>
 
             <div class="mb-4">
                 <label class="form-label fw-bold text-dark">Ghi Chú:</label>
-                <input type="text" name="ghiChu" class="form-control bg-white rounded-3 py-2" value="@(string.IsNullOrEmpty(Model?.GhiChu) ? "Mua sách trực tuyến" : Model.GhiChu)" placeholder="Nhập địa chỉ nhận hoặc ghi chú (nếu có)..." />
+                <input asp-for="GhiChu" class="form-control bg-white rounded-3 py-2" placeholder="Nhập ghi chú (nếu có)..." />
             </div>
 
             <div class="d-flex justify-content-between align-items-center pt-2">
@@ -54,14 +64,14 @@
                 </a>
 
                 <div class="d-flex gap-2">
-                    <!-- NÚT THÊM VÀO GIỎ MUA (ĐÃ SỬA: LẤY ĐÚNG SỐ LƯỢNG MUA) -->
-                    <button type="button" onclick="themVaoGioMua('Mua')" class="btn btn-warning text-dark fw-bold rounded-3 px-3 py-2 shadow-sm">
+                    <!-- NÚT THÊM VÀO GIỎ (ĐÃ SỬA: LẤY ĐÚNG SỐ LƯỢNG NGƯỜI DÙNG NHẬP) -->
+                    <button type="button" onclick="themVaoGioHang('Muon')" class="btn btn-warning text-dark fw-bold rounded-3 px-3 py-2 shadow-sm">
                         <i class="bi bi-cart-plus me-1"></i> Thêm vào giỏ
-                    </a>
+                    </button>
 
-                    <!-- NÚT XÁC NHẬN MUA NGAY -->
+                    <!-- NÚT XÁC NHẬN MƯỢN NGAY -->
                     <button type="submit" class="btn btn-success fw-bold rounded-3 px-3 py-2 shadow">
-                        <i class="bi bi-bag-check me-1"></i> Xác Nhận Mua
+                        <i class="bi bi-check-circle me-1"></i> Xác Nhận
                     </button>
                 </div>
             </div>
@@ -70,9 +80,9 @@
 </div>
 
 <script>
-    function themVaoGioMua(loai) {
-        var maSach = "@Model?.MaSach";
-        var soLuong = document.getElementById("inputSoLuongMua").value || 1;
+    function themVaoGioHang(loai) {
+        var maSach = "@Model.MaSach";
+        var soLuong = document.getElementById("inputSoLuong").value || 1;
         window.location.href = "/GioHang/ThemVaoGio?maSach=" + maSach + "&soLuong=" + soLuong + "&loaiYeuCau=" + loai;
     }
 </script>

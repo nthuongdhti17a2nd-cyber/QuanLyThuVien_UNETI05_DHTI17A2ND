@@ -1,7 +1,6 @@
-﻿
-using QuanLyThuVien_UNETI05_DHTI17A2ND.Models;
-using System;
-using System.Collections.Generic;
+﻿// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Khai báo Entity DocGia
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,31 +18,31 @@ namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Models
         public string HoTen { get; set; } = string.Empty;
 
         [DataType(DataType.Date)]
-        public DateTime? NgaySinh { get; set; }
+        public DateTime NgaySinh { get; set; }
 
-        [StringLength(20)]
+        [StringLength(10)]
         public string? GioiTinh { get; set; }
 
+        [Required(ErrorMessage = "Số điện thoại không được để trống")]
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         [StringLength(15)]
-        public string? SoDienThoai { get; set; }
+        public string SoDienThoai { get; set; } = string.Empty;
 
-        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-        [StringLength(150)]
-        public string? Email { get; set; }
+        [Required(ErrorMessage = "Email không được để trống")]
+        [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
+        [StringLength(100)]
+        public string Email { get; set; } = string.Empty;
 
-        [StringLength(250)]
+        [StringLength(200)]
         public string? DiaChi { get; set; }
 
-        [DataType(DataType.Date)]
         public DateTime NgayDangKy { get; set; } = DateTime.Now;
 
         public bool TrangThai { get; set; } = true;
 
-        [ForeignKey(nameof(MaTaiKhoan))]
-        public virtual TaiKhoan TaiKhoan { get; set; } = null!;
-
-        public virtual ICollection<PhieuMuon> PhieuMuons
-        { get; set; } = new List<PhieuMuon>();
+        // Navigation properties
+        [ForeignKey("MaTaiKhoan")]
+        public virtual TaiKhoan? TaiKhoan { get; set; }
+        public virtual ICollection<PhieuMuon>? PhieuMuons { get; set; }
     }
 }

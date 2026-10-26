@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Data;
-using QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models;
+using QuanLyThuVien_UNETI05_DHTI17A2ND.Data;
+using QuanLyThuVien_UNETI05_DHTI17A2ND.Models;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Controllers
+namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Controllers
 {
     public class SachController : Controller
     {
@@ -127,7 +127,8 @@ namespace QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Controllers
                 // Xử lý lưu ảnh nếu Admin có chọn khi tạo mới
                 if (fHinhAnh != null && fHinhAnh.Length > 0)
                 {
-                    string fileName = Path.GetFileName(fHinhAnh.FileName);
+                    string extension = Path.GetExtension(fHinhAnh.FileName).ToLowerInvariant();
+                    string fileName = $"{Guid.NewGuid():N}{extension}";
                     string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/sach");
 
                     if (!Directory.Exists(uploadDir))
@@ -188,21 +189,49 @@ namespace QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Controllers
 
                     if (fHinhAnh != null && fHinhAnh.Length > 0)
                     {
-                        string fileName = Path.GetFileName(fHinhAnh.FileName);
-                        string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/sach");
+                        string extension = Path.GetExtension(fHinhAnh.FileName)
+                                               .ToLowerInvariant();
 
-                        if (!Directory.Exists(uploadDir))
+                        string[] allowedExtensions =
                         {
+        ".jpg", ".jpeg", ".png", ".webp"
+    };
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError(
+                                "HinhAnh",
+                                "Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP."
+                            );
+                        }
+                        else if (fHinhAnh.Length > 5 * 1024 * 1024)
+                        {
+                            ModelState.AddModelError(
+                                "HinhAnh",
+                                "Ảnh không được vượt quá 5MB."
+                            );
+                        }
+                        else
+                        {
+                            string fileName = $"{Guid.NewGuid():N}{extension}";
+
+                            string uploadDir = Path.Combine(
+                                Directory.GetCurrentDirectory(),
+                                "wwwroot", "images", "sach"
+                            );
+
                             Directory.CreateDirectory(uploadDir);
-                        }
 
-                        string filePath = Path.Combine(uploadDir, fileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await fHinhAnh.CopyToAsync(fileStream);
-                        }
+                            string filePath = Path.Combine(uploadDir, fileName);
 
-                        sach.HinhAnh = fileName;
+                            using (var fileStream = new FileStream(
+                                filePath, FileMode.CreateNew))
+                            {
+                                await fHinhAnh.CopyToAsync(fileStream);
+                            }
+
+                            sach.HinhAnh = fileName;
+                        }
                     }
                     else if (sachDb != null)
                     {

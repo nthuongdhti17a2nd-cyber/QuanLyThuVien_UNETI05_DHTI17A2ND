@@ -1,5 +1,6 @@
-﻿
-using QuanLyThuVien_UNETI05_DHTI17A2ND.Models;
+﻿// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Model PhieuMuon
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,39 +13,25 @@ namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Models
         [Key]
         public int MaPhieuMuon { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Vui lòng chọn độc giả")]
         public int MaDocGia { get; set; }
+
+        [ForeignKey("MaDocGia")]
+        public virtual DocGia? DocGia { get; set; }
 
         public int? MaSach { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime NgayMuon { get; set; }
-            = DateTime.Now;
-
-        [Required(ErrorMessage = "Vui lòng chọn hạn trả")]
-        [DataType(DataType.Date)]
-        public DateTime NgayHenTra { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime? NgayTraThucTe { get; set; }
-
-        [StringLength(500)]
-        public string? GhiChu { get; set; }
-
-        [Required]
-        [StringLength(30)]
-        public string TrangThai { get; set; }
-            = "ChoXacNhan";
-
-        [ForeignKey(nameof(MaDocGia))]
-        public virtual DocGia DocGia { get; set; } = null!;
-
-        [ForeignKey(nameof(MaSach))]
+        [ForeignKey("MaSach")]
         public virtual Sach? Sach { get; set; }
 
-        public virtual ICollection<ChiTietPhieuMuon>
-            ChiTietPhieuMuons
-        { get; set; }
-                = new List<ChiTietPhieuMuon>();
+        public DateTime NgayMuon { get; set; } = DateTime.Now;
+        public DateTime NgayHenTra { get; set; } = DateTime.Now.AddDays(14);
+        public DateTime? NgayTraThucTe { get; set; }
+
+        public string TrangThai { get; set; } = "Chờ xác nhận";
+        public string? GhiChu { get; set; }
+
+        // Navigation property liên kết sang ChiTietPhieuMuon
+        public virtual ICollection<ChiTietPhieuMuon> ChiTietPhieuMuons { get; set; } = new List<ChiTietPhieuMuon>();
     }
 }

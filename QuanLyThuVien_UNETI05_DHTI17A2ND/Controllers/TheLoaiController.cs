@@ -5,14 +5,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Data;
-using QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Models;
 using QuanLyThuVien_UNETI05_DHTI17A2ND.Data;
 using QuanLyThuVien_UNETI05_DHTI17A2ND.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Controllers
+namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Controllers
 {
     public class TheLoaiController : Controller
     {

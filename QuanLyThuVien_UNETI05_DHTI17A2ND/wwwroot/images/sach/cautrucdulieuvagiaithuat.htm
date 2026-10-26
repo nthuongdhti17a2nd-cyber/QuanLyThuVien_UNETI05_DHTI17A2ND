@@ -1,0 +1,793 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="app" ng-controller="DefaultController">
+<head id="Head1"><meta charset="utf-8" /><title>
+	Thư viện số
+</title><meta name="description" content="blank page" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel="shortcut icon" type="image/png" href="/Resources/assets/index/imgs/favicon.png" />
+    <script src="/App/Admin/lib/jquery/jquery-2.1.4.min.js"></script>
+    <script type="tet/javascript" src="/Components/jquery-ui-1.11.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <!--Basic Styles-->
+    <link href="/App/Admin/assets/css/bootstrap.min.css" rel="stylesheet" /><link href="/Resources/vendors/css/font-awesome.min.css" rel="stylesheet" /><link href="/App/Admin/assets/css/weather-icons.min.css" rel="stylesheet" />
+
+    <!--Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css" />
+
+    <!--Beyond styles-->
+    <link href="/App/Admin/assets/css/demo.min.css" rel="stylesheet" /><link href="/App/Admin/assets/css/typicons.min.css" rel="stylesheet" /><link href="/App/Admin/assets/css/animate.min.css" rel="stylesheet" /><link href="/CSS/SearchThumb.css" rel="stylesheet" /><link href="/CSS/zebra_dialog.css" rel="stylesheet" /><link href="/App/Admin/lib/modules/angularjs-toaster/toaster.css" rel="stylesheet" /><link href="/App/Admin/lib/WebImageMaker/jquery.fileupload.css" rel="stylesheet" />
+
+   <!-- Scripts -->
+	<script type="text/javascript" src="/Systems/CMS/Scripts/AlbumExplorer.js"></script>
+	<script src="/App/Admin/lib/angular/angular-datetimepicker/moment.js"></script>
+	<script src="/Scripts/datepicker-vn.js"></script>
+    <script src="/App/Admin/lib/angular/angular.js"></script>
+    <script src="/App/Admin/lib/utilities.js"></script>
+    <script src="/App/Admin/lib/angular/angular-animate/angular-animate.js"></script>
+    <script src="/App/Admin/lib/angular/angular-cookies/angular-cookies.js"></script>
+    <script src="/App/Admin/lib/angular/angular-resource/angular-resource.js"></script>
+    <script src="/App/Admin/lib/angular/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/App/Admin/lib/angular/angular-touch/angular-touch.js"></script>
+    <script src="/App/Admin/lib/angular/angular-ui-router/angular-ui-router.js"></script>
+    <script src="/App/Admin/lib/angular/angular-ocLazyLoad/ocLazyLoad.js"></script>
+    <script src="/App/Admin/lib/angular/angular-ngStorage/ngStorage.js"></script>
+    <script src="/App/Admin/lib/angular/angular-ui-utils/angular-ui-utils.js"></script>
+    <script src="/App/Admin/lib/angular/angular-breadcrumb/angular-breadcrumb.js"></script>
+    <script src="/App/Admin/lib/angular/angular-ui-bootstrap/ui-bootstrap.js"></script>
+    <script src="/App/Admin/lib/jquery/slimscroll/jquery.slimscroll.js"></script>
+    <script src="/App/Admin/lib/modules/ui-select-master/dist/select.js"></script>
+    <script src="/App/Admin/lib/modules/angularjs-toaster/toaster.js"></script>
+    <script src="/App/Admin/lib/angular/angular-file-upload/angular-file-upload.min.js"></script>
+	<script src="/App/Admin/lib/angular/angular-datetimepicker/angular-eonasdan-datetimepicker.js"></script>
+    <script src="/App/Admin/lib/malihu-custom-scrollbar-plugin-master/js/minified/jquery-ui-1.10.4.min.js"></script>
+    <!-- App Con/fig and Routing Scripts -->
+    <script src="/App/Admin/app/app.js"></script>
+    <script src="/App/Admin/app/config.js"></script>
+    <script src="/App/Admin/app/beyond.js"></script>
+    <!-- Layout R/elated Directives -->
+    <script src="/App/Admin/app/directives/loading.js"></script>
+    <script src="/App/Admin/app/directives/skin.js"></script>
+    <script src="/App/Admin/app/directives/sidebar.js"></script>
+    <script src="/App/Admin/app/directives/header.js"></script>
+    <script src="/App/Admin/app/directives/navbar.js"></script>
+    <script src="/App/Admin/app/directives/chatbar.js"></script>
+    <script src="/App/Admin/app/directives/widget.js"></script>
+	<script src="/App/Admin/app/controllers/ModuleController.js"></script>
+	<script src="/App/Admin/app/services/ModuleService.js"></script>
+
+  
+    <script src="/App/Admin/app/services/UploadImgService.js" type="text/javascript"></script>
+    <script src="/App/Admin/app/directives/UploadImgDirective.js" type="text/javascript"></script>
+    <script src="/App/Admin/app/controllers/DefaultController.js"></script>
+    <script src="/App/Admin/app/directives/reusableDirectives.js"></script>
+    <script src="/App/Admin/app/controllers/VoteController.js"></script>
+    <script src="/App/Admin/app/services/DefaultService.js"></script>
+    <script src="/App/Admin/app/services/VoteService.js"></script>
+	
+	
+	<script type="application/javascript" src="/Scripts/pydrmscript.js"></script>
+<link href="/WebResource.axd?d=PT8kVPvMDaIy7CCrhnCUamOb-shpNFqBed3XrUiwEd3wRTpzdMISAGz5JRdTfnNbISQff4tW3sg6GXyy4-xUYfU_RS9CQ2HKJxfV-GW9PvTQSKM2LC1GJHiyz8NnBorlgDx8W2A5wgRvf5zV_ODpnA2&amp;t=636729468620000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=FCgCvJZE56eesIEagJJBCI_X95GMoHfPSyPYWwe_rGtObcGdIaWmzGCpf-c5rUzkV9kJD2Dadk9t2ekQrif6U9JxR6qd3Vd6J-ISUvW8eATCmdQb12v-yIa--jrwy9ceUTAe_mEo-ySgaNzVUzxuY4ZLbyzIMiEgKVuVkyBNBeE1&amp;t=636729468620000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /></head>
+<body id="bd" data-spy="scroll" data-target=".main-nav" data-offset="50">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<form name="form1" method="post" action="./thong-tin-sach?id=58" id="form1">
+<div>
+<input type="hidden" name="RadScriptManager1_TSM" id="RadScriptManager1_TSM" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPaA8FDzhkZjMyZjE4MjQ3YjQ0MRgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAQURUmFkV2luZG93TWFuYWdlcjFqLc6U7xKfKkubVW5wEngV1s+tIPm6UIPRteYzCOXGfA==" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=8cNeBV3IwN-72u1c4CqlD7sAKK2kHoW61uO_Jql_9bwvmZgsGYazUi7_VBJoI1vp1_Hdlti-H53Kw0IUt85gxDIrzDe6T-JHUnGiiVu3LoY1&amp;t=639191085332169432" type="text/javascript"></script>
+
+
+<script src="/Telerik.Web.UI.WebResource.axd?_TSM_HiddenField_=RadScriptManager1_TSM&amp;compress=1&amp;_TSM_CombinedScripts_=%3b%3bSystem.Web.Extensions%2c+Version%3d4.0.0.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d31bf3856ad364e35%3avi-VN%3add3ac3d5-1e29-4112-8fed-529caffa8f24%3aea597d4b%3ab25378d2%3bTelerik.Web.UI%2c+Version%3d2014.2.618.40%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3avi-VN%3a15590aec-52e9-4282-8ed4-e91eae292c7b%3a16e4e7cd%3af7645509%3a24ee1bba%3a92fe8ea0%3af46195d3%3afa31b949%3a874f8ea2%3ac128760b%3a19620875%3a490a9d4e%3abd8f85e4" type="text/javascript"></script>
+<script src="../Services/PortletProxy.asmx/js" type="text/javascript"></script>
+<script src="../Services/ModuleProxy.asmx/js" type="text/javascript"></script>
+<script src="../Services/CMS.asmx/js" type="text/javascript"></script>
+<script src="../Services/WeatherService.asmx/js" type="text/javascript"></script>
+<script src="../Services/DMSSearch.asmx/js" type="text/javascript"></script>
+<script src="../Services/AuthorCMS.asmx/js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+var PageMethods = function() {
+PageMethods.initializeBase(this);
+this._timeout = 0;
+this._userContext = null;
+this._succeeded = null;
+this._failed = null;
+}
+PageMethods.prototype = {
+_get_path:function() {
+ var p = this.get_path();
+ if (p) return p;
+ else return PageMethods._staticInstance.get_path();},
+SearchAd:function(txtSearch,succeededCallback, failedCallback, userContext) {
+return this._invoke(this._get_path(), 'SearchAd',false,{txtSearch:txtSearch},succeededCallback,failedCallback,userContext); }}
+PageMethods.registerClass('PageMethods',Sys.Net.WebServiceProxy);
+PageMethods._staticInstance = new PageMethods();
+PageMethods.set_path = function(value) { PageMethods._staticInstance.set_path(value); }
+PageMethods.get_path = function() { return PageMethods._staticInstance.get_path(); }
+PageMethods.set_timeout = function(value) { PageMethods._staticInstance.set_timeout(value); }
+PageMethods.get_timeout = function() { return PageMethods._staticInstance.get_timeout(); }
+PageMethods.set_defaultUserContext = function(value) { PageMethods._staticInstance.set_defaultUserContext(value); }
+PageMethods.get_defaultUserContext = function() { return PageMethods._staticInstance.get_defaultUserContext(); }
+PageMethods.set_defaultSucceededCallback = function(value) { PageMethods._staticInstance.set_defaultSucceededCallback(value); }
+PageMethods.get_defaultSucceededCallback = function() { return PageMethods._staticInstance.get_defaultSucceededCallback(); }
+PageMethods.set_defaultFailedCallback = function(value) { PageMethods._staticInstance.set_defaultFailedCallback(value); }
+PageMethods.get_defaultFailedCallback = function() { return PageMethods._staticInstance.get_defaultFailedCallback(); }
+PageMethods.set_enableJsonp = function(value) { PageMethods._staticInstance.set_enableJsonp(value); }
+PageMethods.get_enableJsonp = function() { return PageMethods._staticInstance.get_enableJsonp(); }
+PageMethods.set_jsonpCallbackParameter = function(value) { PageMethods._staticInstance.set_jsonpCallbackParameter(value); }
+PageMethods.get_jsonpCallbackParameter = function() { return PageMethods._staticInstance.get_jsonpCallbackParameter(); }
+PageMethods.set_path("thong-tin-sach");
+PageMethods.SearchAd= function(txtSearch,onSuccess,onFailed,userContext) {PageMethods._staticInstance.SearchAd(txtSearch,onSuccess,onFailed,userContext); }
+//]]>
+</script>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+</div>
+		<div id="RadWindowManager1" style="display:none;">
+	<!-- 2014.2.618.40 --><div id="RadWindowManager1_alerttemplate" style="display:none;">
+		<div class="rwDialogPopup radalert">			
+			<div class="rwDialogText">
+			{1}				
+			</div>
+			
+			<div>
+				<a  onclick="$find('{0}').close(true);"
+				class="rwPopupButton" href="javascript:void(0);">
+					<span class="rwOuterSpan">
+						<span class="rwInnerSpan">##LOC[OK]##</span>
+					</span>
+				</a>				
+			</div>
+		</div>
+		</div><div id="RadWindowManager1_prompttemplate" style="display:none;">
+		 <div class="rwDialogPopup radprompt">			
+			    <div class="rwDialogText">
+			    {1}				
+			    </div>		
+			    <div>
+				    <script type="text/javascript">
+				    function RadWindowprompt_detectenter(id, ev, input)
+				    {							
+					    if (!ev) ev = window.event;                
+					    if (ev.keyCode == 13)
+					    {															        
+					        var but = input.parentNode.parentNode.getElementsByTagName("A")[0];					        
+					        if (but)
+						    {							
+							    if (but.click) but.click();
+							    else if (but.onclick)
+							    {
+							        but.focus(); var click = but.onclick; but.onclick = null; if (click) click.call(but);							 
+							    }
+						    }
+					       return false;
+					    } 
+					    else return true;
+				    }	 
+				    </script>
+				    <input title="Enter Value" onkeydown="return RadWindowprompt_detectenter('{0}', event, this);" type="text"  class="rwDialogInput" value="{2}" />
+			    </div>
+			    <div>
+				    <a onclick="$find('{0}').close(this.parentNode.parentNode.getElementsByTagName('input')[0].value);"				
+					    class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+				    <a onclick="$find('{0}').close(null);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+			    </div>
+		    </div>				       
+		</div><div id="RadWindowManager1_confirmtemplate" style="display:none;">
+		<div class="rwDialogPopup radconfirm">			
+			<div class="rwDialogText">
+			{1}				
+			</div>						
+			<div>
+				<a onclick="$find('{0}').close(true);"  class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+				<a onclick="$find('{0}').close(false);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+			</div>
+		</div>		
+		</div><input id="RadWindowManager1_ClientState" name="RadWindowManager1_ClientState" type="hidden" />
+</div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('RadScriptManager1', 'form1', [], [], [], 90, '');
+//]]>
+</script>
+
+        
+
+<link href="/Resources/vendors/css/normalize.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="/Resources/vendors/css/bootstrap.min.css" rel="stylesheet">
+<!-- font-awesome -->
+<link href="/Resources/vendors/css/font-awesome.min.css" rel="stylesheet">
+<!-- owl.carousel -->
+<link href="/Resources/vendors/OwlCarousel2-2.3.3/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/Resources/vendors/OwlCarousel2-2.3.3/assets/owl.theme.default.min.css" rel="stylesheet">
+<!-- menu -->
+<link href="/Resources/vendors/smartmenus-1.0.1/addons/bootstrap/jquery.smartmenus.bootstrap.css" rel="stylesheet" />
+
+<!-- tab scroll -->
+<link href="/Resources/vendors/jquery.scrolling-tabs/jquery.scrolling-tabs.min.css" rel="stylesheet">
+
+<link href="/Resources/resources/css/thuvien_styles.css" rel="stylesheet">
+<link href="/Resources/resources/css/skinsLib.css" rel="stylesheet">
+
+<div id="page" class="index">
+    <div id="psc-divPanelWrapper">
+	<div id="psc-divPanelTop" style="width:100%;float:left">
+		<div id="psc-divPanelTop-Content" style="min-height: 30px;">
+			<div id="psc-divPortlet-d54d2f90-26ae-4e36-a5ea-dcae8fbf2888" class="psc-divPortlet-Wrapper" style="">
+				<div class="psc-divPortlet-Content">
+					
+<script>
+	$(document).ready(function () {
+		UpdateCustomerStatus();
+		updateCartCount();
+	});
+	function UpdateCustomerStatus() {
+		if (IsLogedIn()) {
+			let customerData = GetCustomerData();
+			pnCustomerStatus.innerHTML = `<ul class="breadcrumb">
+                <li>
+                    <a href="/module/profile" title="Thông tin tài khoản">${customerData.CustomerName}</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" title="Đăng xuất" onclick="CustomerLogout();">Thoát</a>
+                </li>
+            </ul>`;
+		} else {
+			pnCustomerStatus.innerHTML = `<ul class="breadcrumb">
+                <li>
+                    <a href="/module/registered" title="Đăng ký">Đăng ký</a>
+                </li>
+                <li>
+                    <a href="/module/login" title="Đăng nhập">Đăng nhập</a>
+                </li>
+            </ul>`;
+		}
+	}
+	function CustomerLogout() {
+	    setCookie('CustomerCookie', "", -1);
+	    location.reload();
+	    UpdateCustomerStatus();
+	}
+	
+	function BookKeyDownSearch(event) {
+        if (event.keyCode == 13) {
+            BookQuickSearch();
+            return false;
+        }
+        else return true;
+    }
+	
+	function BookQuickSearch() {
+		let quickSearchText = document.getElementById("textQuickSearch").value;
+        let escapeQuichSearchText = escape(quickSearchText);
+        window.location.href = `http://drm.neu.edu.vn/module/tim-sach?Searchkey=${escapeQuichSearchText}`;
+	}
+</script>
+<div class="header width-common">
+    <div class="container position-relative">
+        <div class="row">
+            <div class="header-top">
+                <div class="row">
+                    <div class="col-xs-5 col-md-5">
+                        <a class="logo" href="http://drm.neu.edu.vn/" title="Trang chủ">
+<img src="/Resources/Images/SubDomain/HomePage/logo.png" alt="logo Thư viện" />
+</a>
+                    </div>
+                    <div class="col-xs-7 col-md-7 header-search">
+                        <div class="form-search">
+                            <input type="text" class="input-text" name="q" id="textQuickSearch" placeholder="Tìm kiếm..." onkeydown='return BookKeyDownSearch(event);' >
+							<a href="javascript:void(0);" onclick="BookQuickSearch()" class="btn btn-primary">
+                                <span class="fa fa-search"></span>
+                            </a>
+                        </div>
+
+                        <div class="cart">
+                            <a href="javascript:void(0);" onclick="openCart()">
+                                <img class="cart-icon" src="/Resources/resources/imgs/icons/shopping-cart-30.png" />
+                                <span class="cart-num" id="cartCount">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="login" id="pnCustomerStatus">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/module/registered" title="Đăng ký">Đăng ký</a>
+                </li>
+                <li>
+                    <a href="/module/login" title="Đăng nhập">Đăng nhập</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="menu width-common">
+    <div class="navbar navbar-default" role="navigation" data-spy="affix" data-offset-top="40">
+        <div class="container">
+            <div class="row">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+                        <li>
+                            <a class="menu-active menu-home" href="/" title="home">
+                                <span class="fa fa-home" aria-hidden="true"></span>
+                            </a>
+                        </li>
+                        <li ><a  href='https://drm.neu.edu.vn/module/tai-lieu-nganh?id=ALL'>Giới thiệu sách</a></li><li ><a  href='/module/books'>Ngành đào tạo</a></li><li ><a  href='#'>Liên Kết</a></li><li ><a  href='/module/help'>Hướng dẫn</a></li><li ><a  href='/module/lien-he-2'>Liên hệ</a></li><li><a  href='#'  >Tài liệu khác<span class='caret'></span></a><ul class='dropdown-menu'><li  class=''><a  class='' title='Đề cương học phần' href='https://drm.neu.edu.vn/module/sach-trong-goi?id=DCHP'><span class='fa fa-angle-double-right' aria-hidden='true'></span>Đề cương học phần</a></li><li  class=''><a  class='' title='Slides bài giảng' href='https://drm.neu.edu.vn/module/sach-trong-goi?id=SlideBaiGiang'><span class='fa fa-angle-double-right' aria-hidden='true'></span>Slides bài giảng</a></li><li  class=''><a  class='' title='Các loại biểu mẫu' href='https://drm.neu.edu.vn/module/sach-trong-goi?id=BieuMau'><span class='fa fa-angle-double-right' aria-hidden='true'></span>Các loại biểu mẫu</a></li><li  class=''><a  class='' title='Các loại tài liệu khác' href='https://drm.neu.edu.vn/module/sach-trong-goi?id=TLKhac'><span class='fa fa-angle-double-right' aria-hidden='true'></span>Các loại tài liệu khác</a></li></ul></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+				</div>
+			</div>
+		</div>
+	</div><div id="psc-divPanelMid">
+		<div id="psc-divPanelCenter" style="width:100%;float:left">
+			<div id="psc-divPanelCenter-Content" style="min-height: 30px;">
+				
+<div class="book-detail width-common">
+	<div class="container">
+		<div class="row">
+			<div id="msgpanel" class="col-md-12" style="float: left; margin-top: 15px;"></div>
+			<div class="top-detail width-common">
+				<div class="wrapper  width-common">
+					<div class="thumb" id="bookCover">
+					</div>
+					<div class="content" style="padding-left:250px">
+						<div class="width-common">
+							<h1 class="title-book" id="bookTitle"></h1>
+							<a class="btn-like" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Yêu thích"><i class="fa fa-heart" aria-hidden="true"></i></a>
+							<!--<div class="price" id="bookPrice"></div>-->
+							<div class="author">
+								<span class="text-uppercase padding-right-15">tác giả:</span>
+								<span class="name" id="bookAuthor"></span>
+							</div>
+							<div class="type-book">
+								<div class="text-uppercase padding-right-15">thể loại:</div>
+								<div class="name" id="bookCollection"></div>
+							</div>
+							<div class="type-book">
+								<div class="text-uppercase padding-right-15">chuyên ngành:</div>
+								<div class="name" id="bookOlogy"></div>
+							</div>
+							<div class="type-book">
+								<div class="text-uppercase padding-right-15">môn học:</div>
+								<div class="name" id="bookCurriculum"></div>
+							</div>
+							<!--<div class="clearfix"></div>
+							<div class="btn-bottom">
+								<a class="btn-buynow" href="javascript:void(0);" onclick="addBookToCart()">Chọn mua</a>
+							</div>
+							<div class="clearfix"></div>-->
+							<div id="bookStatus"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="bottom-detail width-common">
+				<div class="tabs-scroll">	
+					<ul class="nav nav-tabs" id="ulBookTabs">
+						<li class="active"><a data-toggle="tab" href="#tabBookInfo"><i class="fa fa-server" ></i>Giới thiệu</a></li>
+						<li><a data-toggle="tab" href="#tabBookRelated"><i class="fa fa-book"></i>Sách liên quan</a></li>
+						<li><a data-toggle="tab" href="#tabBookComment"><i  class="fa fa-stack-exchange"></i>Bình luận</a></li>
+						<li><a  data-toggle="tab" href="#tabBookReview"><i class="fa fa-eye"></i>Xem trước</a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div id="tabBookInfo" class="tab-pane fade in active"></div>
+						<div id="tabBookRelated" class="tab-pane fade">
+							<div class="book-list">								
+								<div class="book-block owl-carousel owl-theme" id="bookRelated"></div>
+							</div>
+						</div>
+						<div id="tabBookComment" class="tab-pane fade">
+							<div class="comments">
+								<div class="comment-item">
+									<div class="top">
+										<span class="user-name">admin</span>
+										<span class="pull-right">1 tháng trước</span>
+									</div>
+									<div class="item-content">
+										Hiện tại website chưa hỗ trợ bình luận tài liệu online
+									</div>
+									<div class="bottom">
+										<a class="btn-comment like" href="javascript:void()">
+											<span class="">999</span>
+										</a>
+										<a class="btn-comment dis-like" href="javascript:void()">
+											<span class="">0</span>
+										</a>
+									</div>
+								</div>
+							</div>
+							<!-- /.comments -->
+							<div class="comment-form">
+								<div class="form-input">
+									<label>Tên thành viên: 
+										<span class="user-name" id="commentName">&nbsp;</span>
+									</label>											
+								</div>
+								<div class="form-input">
+									<label>Nội dung <span class="red">*</span></label>
+									<textarea class="form-control noi-dung" cols="30" rows="5" ></textarea>
+								</div>
+								<div class="form-input">
+									<label>Mã kiểm tra:</label>								
+									<img src="../Resources/XuatBanSo/imgs/capcha.png"/>
+									<a href="javascript:void(0);">Tải lại hình</a>
+								</div>
+								<div class="form-input">
+									<label>Nhập mã kiểm tra:</label>
+									<input type="text" >
+									<p class="notice">( Nhập các ký tự ở hình trên không phân biệt chữ HOA chữ thường )</p>
+								</div>	
+
+								<div class="btn-300">
+									<div class="form-input">
+										<input type="button" value="Gửi bình luận"/>
+									</div>	
+								</div>
+							</div>
+						</div>
+						<div id="tabBookReview" class="tab-pane fade">
+							<div id="error_message"></div>
+							<div id="error_version_info"></div>
+							<div id="error_message"></div>
+							<div id="bookDemo"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /.tabs-scroll -->
+			</div>
+			<!-- /.bottom-detail -->
+		</div>
+	</div>
+	
+</div>
+
+<script>
+	$(document).ready(function () {
+        getBookContent();
+		getBookRelated();
+		getBookComment();
+		getBookDemo();
+	});
+	
+	function getbookid(){
+		const hu = window.location.search.substring(1);
+		let bookid = "0";
+		if (hu != "") {
+			const par = unescape(hu);
+			let gy = par.split("&");
+			gy.forEach(p => {
+				let ft = p.split("=");
+				if (ft[0] === "id") bookid = ft[1];
+			});
+		}
+		return bookid;
+    }
+	
+	function getBookContent() {
+		$.ajax({
+			headers: { 'Token': GetCustomerData().Token },
+            type: "GET",
+            url: `${getPyDrmApi()}OnlineApi/Book/Detail?bookId=${getbookid()}`,
+            contentType: "application/json"
+        })
+        .done(responseData => {
+			if (!responseData.Success) {
+				msgpanel.innerHTML = `<div class="alert alert-warning"><strong> ${translateMessage(responseData.Message)} </strong></div>`;
+			} else {
+				bookCover.innerHTML = `<img class="img-responsive" src="${responseData.BookCover}" alt="${responseData.Title}"/>`;
+				bookTitle.innerHTML = `${responseData.Title}`;
+				//bookPrice.innerHTML = `${priceFormat(responseData.Price)}`;
+				bookAuthor.innerHTML = `${responseData.Author}`;
+				tabBookInfo.innerHTML = `<p>${responseData.Sumarize}</p>`;
+				if (responseData.CustomerBookStatus == 0)
+					bookStatus.innerHTML = `<p class="notice">Chưa có sẵn!</p>`;
+				else if (responseData.CustomerBookStatus != 4)
+					bookStatus.innerHTML = `<p class="notice">Bạn đã có sách này!</p>`;
+				
+				let bookCollectionHtml = "";
+				responseData.BookCollections.forEach(item => {
+					bookCollectionHtml += `<a href="javascript:void(0);">${item.CollectionName},</a>`;
+				});
+				bookCollection.innerHTML = bookCollectionHtml;
+				
+				let bookOlogyHtml = "";
+				responseData.BookOlogies.forEach(item => {
+					bookOlogyHtml += `<a href="javascript:void(0);">${item.OlogyName},</a>`;
+				});
+				bookOlogy.innerHTML = bookOlogyHtml;
+				
+				let bookCurriculumHtml = "";
+				responseData.BookCurriculums.forEach(item => {
+					bookCurriculumHtml += `<a href="javascript:void(0);">${item.CurriculumName},</a>`;
+				});
+				bookCurriculum.innerHTML = bookCurriculumHtml;
+			}
+		});
+	}
+	
+	function getBookRelated() {
+		$.ajax({
+			headers: { 'Token': GetCustomerData().Token },
+            type: "GET",
+            url: `${getPyDrmApi()}OnlineApi/Book/Relate?bookId=${getbookid()}`,
+            contentType: "application/json"
+        })
+        .done(responseData => {
+			if (responseData.length > 0 && !responseData[0].Success) {
+				tabBookRelated.innerHTML = `<div class="alert alert-warning"><strong> ${translateMessage(responseData[0].Message)} </strong></div>`;
+			} else {
+				let relatedBookHtml = "";
+				responseData.forEach(book => {
+					relatedBookHtml += `<div class="block-item"><a href="${getBookDetailModule()}?id=${book.BookID}"><div class="thumb"><img src="${book.BookCover}" alt="${book.Title}"/></div><div class="title">${priceFormat(book.Price)}</div></a></div>`;
+				});
+				bookRelated.innerHTML = relatedBookHtml;
+			}
+		});
+	}
+	
+	function addBookToCart() {
+		addItemToCart(getbookid(), "book");
+		bookStatus.innerHTML = `<p class="notice">Chọn mua thành công! <a href="javascript:void(0);" onclick="openCart()">Xem giỏ sách</a></p>`;
+	}
+	
+	function getBookComment() {
+		if (IsLogedIn()) {
+			commentName.innerHTML = GetCustomerData().CustomerName;
+		}
+	}
+	
+	function getBookDemo() {
+		bookDemo.innerHTML = `<iframe style='border: none' src='/Components/pdfjs/web/viewer.html?file=/Handlers/GetDemoBook.ashx?id%3d${getbookid()}' width='100%' height='900' allowfullscreen=''></iframe>`;
+	}
+</script>
+			</div>
+		</div>
+	</div><div id="psc-divPanelBottom" style="width:100%;float:left">
+		<div id="psc-divPanelBottom-Content" style="min-height: 30px;">
+			<div id="psc-divPortlet-98b36329-d740-40aa-beab-2efe92946698" class="psc-divPortlet-Wrapper" style="">
+				<div class="psc-divPortlet-Content">
+					
+<div class="footer width-common">
+	<div class="container position-relative">
+		<div class="row">
+			<div class="row">
+				<div class="my-col col-xs-5 col-sm-5 col-md-5">
+					<div class="widget">
+						<div class="logo-footer">
+							<a href="javascript:void(0)" title="trang chủ">
+								<img src="/Resources/Images/Subdomain/HomePage/logo-white.png" alt="logo Thư viện" />
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- Giới thiệu -->
+				<div class="my-col col-xs-2 col-sm-2 col-md-2">
+					<div class="widget">
+						<h3>Giới thiệu</h3>
+						<ul>
+							<li><a href="javascript:void(0)">Trang chủ</a></li>
+							<li><a href="javascript:void(0)">Giới thiệu</a></li>
+							<li><a href="javascript:void(0)">Facebook</a></li>
+							<li><a href="/vi/thong-tin/dieu-khoan-va-bao-mat">Điều khoản v&agrave; bảo mật</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- Trợ giúp -->
+				<div class="my-col col-xs-2 col-sm-2 col-md-2">
+					<div class="widget">
+						<h3>Truy cập</h3>
+						<ul>
+							<div class="online" style="color:#b5b5b5">
+								<p><img src="/Resources/ImagePhoto/icon-hn.png" />&nbsp;Online:&nbsp;<span><span id="ctl19_psc-portlet-98b36329-d740-40aa-beab-2efe92946698_Label2">243</span></span></p>
+							</div>
+							<div class="truycap" style="color:#b5b5b5">
+								<p><img src="/Resources/ImagePhoto/icon-all.png" />&nbsp;Tổng:&nbsp;<span><span id="ctl19_psc-portlet-98b36329-d740-40aa-beab-2efe92946698_Label1">5,261,714</span></span></p>
+								<div style="display: none;"><span id="ctl19_psc-portlet-98b36329-d740-40aa-beab-2efe92946698_Label4">22,996</span></div>
+							</div>
+							
+						</ul>
+					</div>
+				</div>
+				<!-- Tải ứng dụng -->
+				<div class="my-col col-xs-3 col-sm-3 col-md-3">
+					<div class="widget download-app">
+						<h3>Tải ứng dụng</h3>
+						<ul>
+							<li><a href="https://apps.apple.com/us/app/neu-reader/id1460634255?l=vi&amp;ls=1"><em class="fa fa-apple" aria-hidden="true"></em><span>IOS</span></a></li>
+							<li><a href="https://play.google.com/store/apps/details?id=psctelecom.neureader"><em class="fa fa-android" aria-hidden="true"></em><span>Android</span></a></li>
+							<li><a href="http://drm.neu.edu.vn/download/NEUReader_1.2.exe"><em class="fa fa-windows" aria-hidden="true"></em><span>Windows</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<div class="logo-psc">
+				<a href="http://www.psctelecom.com.vn/" title="psc" target="_blank">
+					<span>Designed and Developed by</span>
+					<img src="/Resources/Images/Subdomain/HomePage/logo_PSC_W.png" alt="logo PSC" />
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<a href="#" class="cd-top">Back To Top</a>
+
+<script src="/Resources/vendors/js/jquery.min.js"></script>
+<script src="/Resources/vendors/js/bootstrap.min.js"></script>
+<script src="/Resources/vendors/OwlCarousel2-2.3.3/owl.carousel.min.js"></script>
+<!--smartmenus-->
+<script src="/Resources/vendors/smartmenus-1.0.1/jquery.smartmenus.min.js"></script>
+<script src="/Resources/vendors/smartmenus-1.0.1/addons/bootstrap/jquery.smartmenus.bootstrap.min.js"></script>
+
+<!-- tabs scroll -->
+<script src="/Resources/vendors/jquery.scrolling-tabs/jquery.scrolling-tabs.min.js"></script>
+
+<script src="/Resources/vendors/bxslider/jquery.bxslider.min.js"></script>
+<script src="/Resources/resources/js/gototop.js"></script>
+<script src="/Resources/resources/js/scripts.js"></script>
+<script>
+    $(document).ready(function () {
+        var owl = $('.banner .owl-carousel');
+        owl.owlCarousel({
+            items: 1,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            animateOut: 'fadeOut',
+            animateIn: 'flipInX',
+            margin: 30
+        });
+
+    });
+
+</script>
+
+
+        <div id="articleModal" class="modal fade" role="form">
+            <div class="modal-dialog modal-lg vertical-align-center-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+	
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadWindowManager, {"clientStateFieldID":"RadWindowManager1_ClientState","formID":"form1","iconUrl":"","minimizeIconUrl":"","name":"RadWindowManager1","skin":"Default","windowControls":"[]"}, null, null, $get("RadWindowManager1"));
+});
+//]]>
+</script>
+</form>
+	<script type="text/javascript">
+		function SearchProcess(event, query) {
+			if (event.keyCode == 13) {
+				OnSearch(query);
+				return false;
+			}
+			return true;
+		}
+		function OnSearch(query) { PageMethods.SearchAd(query, OnRedirectSuccess, OnRedirectFailed); }
+		function OnRedirectSuccess(results, context, methodName) { Redirect("/module/search"); }
+		function OnRedirectFailed(results, context, methodName) { Redirect("/module/search"); }
+		function retitleUrl(str) {
+			str = str.replace(/^\s+|\s+$/g, '');
+			str = str.toLowerCase();
+			var from = "àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ·/_,:;";
+			var to = "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyy------";
+			for (var i = 0, l = from.length ; i < l ; i++) {
+				str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+			}
+			str = str.replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+			return str;
+         };
+         function popunder() {}
+         function showDialogInfomation(dialogId) { PSCPortal.Services.CMS.GetArticleContent(dialogId, GetArticleContentCallback); }
+         function GetArticleContentCallback(result) {
+             $('#articleModal').find('.modal-body').html(result);
+             $('#articleModal').modal();
+             $('#articleModal').find('.modal-body').html(result);
+             $('#articleModal').modal();
+         }
+         $(window).scroll(function () {
+             if ($(this).scrollTop() > 100) {
+                 $('.backtotop').fadeIn();
+                 $('.backtotop').css("display", "block");
+             } else {
+                 $('.backtotop').fadeOut();
+             }
+         });
+	</script>
+
+	<!--  GO TO TOP -->	
+	<script type="text/javascript">
+		$(window).scroll(function () { if ($(this).scrollTop() > 50) { $('.backtotop').fadeIn(); } else { $('.backtotop').fadeOut(); } });
+		$('.backtotop').click(function () { $('body,html').animate({ scrollTop: 0 }, 1200); return false; });
+	</script>
+
+	<script type="text/html" id="search-binding-template">
+		<div class="s-tintuc">
+			<div style="margin-bottom:15px;" class="load-bgname">
+				<div class="load-bgname-title"> Kết quả tìm kiếm:
+					<a data-bind=" html: +Count "></a>
+				</div>
+			</div>
+			<section class="topic-content">
+				<div class="container">
+					<div class="row mt-40">
+						<div class="col-sm-8">
+							<div class="article">
+								<div class="article-thumb-search">
+									<a class="hvr-grow"  data-bind="attr: { href: Link }" %><img data-bind="attr: { src: ImageUrl }" /></a>
+								</div> 
+								<div class="article-content">					  
+									<h4 class="title_home"><a style="font-weight:700;color: #009047;"  class="title_topicdisplay" data-bind="attr: { href: Link }, html: Highligth"></a></h4>
+									<h5 class="h3_content" data-bind="html: Title + '...'"></h5>
+									<p class="txt-date fa fa-clock-o"  aria-hidden="true" data-bind="date: CreatedDate"></p>
+								</div>
+							</div>
+							<div id='pagingContentHolder' class='ct_topic_r1'></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</script>
+	<script type="text/javascript" src="/Scripts/knockout-2.3.0.js"></script>
+	<script src="/Scripts/Common.js" type="text/javascript"></script>
+	<script src="/Scripts/zebra_dialog.js" type="text/javascript"></script>
+	<script src="/Resources/assets/index/resourcesTV/js/jquery.cookie.js"></script>
+</body>
+</html>

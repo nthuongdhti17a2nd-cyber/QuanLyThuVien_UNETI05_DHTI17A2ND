@@ -1,19 +1,17 @@
-﻿
+﻿// Họ và tên: Nguyễn Trung Kiên
+// Mã sinh viên: 23274800010
+// Nội dung thực hiện: Khai báo DbContext đầy đủ 6 bảng & Cấu hình khóa ngoại không xung đột
 using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien_UNETI05_DHTI17A2ND.Models;
 using System.Linq;
-using System.Reflection.Emit;
 
 namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        // Khai báo đầy đủ 6 bảng chính
         public DbSet<TaiKhoan> TaiKhoans { get; set; }
         public DbSet<TheLoai> TheLoais { get; set; }
         public DbSet<Sach> Sachs { get; set; }
@@ -21,20 +19,15 @@ namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Data
         public DbSet<PhieuMuon> PhieuMuons { get; set; }
         public DbSet<ChiTietPhieuMuon> ChiTietPhieuMuons { get; set; }
 
-        protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Khoa chinh ket hop
+            // 1. Cấu hình khóa chính kết hợp cho ChiTietPhieuMuon (MaPhieuMuon, MaSach)
             modelBuilder.Entity<ChiTietPhieuMuon>()
-                .HasKey(c => new
-                {
-                    c.MaPhieuMuon,
-                    c.MaSach
-                });
+                .HasKey(c => new { c.MaPhieuMuon, c.MaSach });
 
-            // Dinh dang gia sach
+            // 2. Định dạng kiểu decimal cho giá sách
             modelBuilder.Entity<Sach>()
                 .Property(s => s.GiaBia)
                 .HasColumnType("decimal(18,2)");
@@ -43,23 +36,11 @@ namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Data
                 .Property(s => s.GiaSach)
                 .HasColumnType("decimal(18,2)");
 
-            // Ten dang nhap khong trung
-            modelBuilder.Entity<TaiKhoan>()
-                .HasIndex(t => t.TenDangNhap)
-                .IsUnique();
-
-            // Ten the loai khong trung
-            modelBuilder.Entity<TheLoai>()
-                .HasIndex(t => t.TenTheLoai)
-                .IsUnique();
-
-            // Khong tu dong xoa du lieu lien quan
-            foreach (var relationship in modelBuilder.Model
-                .GetEntityTypes()
-                .SelectMany(e => e.GetForeignKeys()))
+            // 3. TẮT TỰ ĐỘNG XÓA DÂY CHUYỀN (CASCADE DELETE)
+            // Giúp tránh hoàn toàn lỗi FOREIGN KEY constraint (Introducing FOREIGN KEY constraint may cause cycles)
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
-                relationship.DeleteBehavior =
-                    DeleteBehavior.Restrict;
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
     }

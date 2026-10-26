@@ -1,47 +1,142 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Http
+@{
+    bool isAdmin = Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin";
+    bool isDocGia = Context.Session.GetString("VaiTro") == "DocGia";
+}
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QuanLyThuVien_UNETI05_DHTI17A2ND</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Quản lý Thư viện UNETI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/QuanLyThuVien_UNETI05_DHTI17A2ND.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100 position-relative">
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">QuanLyThuVien_UNETI05_DHTI17A2ND</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 py-2">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold fs-4 me-4" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-journal-bookmark-fill me-2"></i>THƯ VIỆN UNETI
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <!-- Trang chủ luôn xuất hiện -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill me-1"></i> Trang chủ
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @if (isAdmin)
+                        {
+                            <!-- MENU PHÂN HỆ DÀNH CHO ADMIN -->
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="Sach" asp-action="Index">
+                                    <i class="bi bi-journal-bookmark-fill me-1"></i> Quản lý sách
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="TheLoai" asp-action="Index">
+                                    <i class="bi bi-tags-fill me-1"></i> Quản lý thể loại
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="DocGia" asp-action="Index">
+                                    <i class="bi bi-people-fill me-1"></i> Quản lý độc giả
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="PhieuMuon" asp-action="Index">
+                                    <i class="bi bi-receipt-cutoff me-1"></i> Quản lý phiếu mượn
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="Admin" asp-action="ThongKeBaoCao">
+                                    <i class="bi bi-bar-chart-line-fill me-1"></i> Thống kê
+                                </a>
+                            </li>
+                        }
+                        else if (isDocGia)
+                        {
+                            <!-- CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP TÀI KHOẢN ĐỘC GIẢ -->
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="Sach" asp-action="Index">
+                                    <i class="bi bi-book-half me-1"></i> Tra cứu sách
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" asp-controller="PhieuMuon" asp-action="LichSuMuon">
+                                    <i class="bi bi-clock-history me-1"></i> Lịch sử đơn hàng
+                                </a>
+                            </li>
+                        }
                     </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        @if (Context.Session.GetString("TenDangNhap") != null)
+                        {
+                            <span class="text-white me-2 fw-bold">
+                                <i class="bi bi-person-circle me-1"></i> @Context.Session.GetString("TenDangNhap")
+                            </span>
+
+                            <a class="btn btn-outline-light btn-sm fw-bold ms-1" asp-controller="Account" asp-action="Logout">
+                                <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning btn-sm fw-bold text-dark" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                            </a>
+                            <a class="btn btn-success btn-sm fw-bold" asp-controller="Account" asp-action="Register">
+                                <i class="bi bi-person-plus-fill me-1"></i> Đăng ký
+                            </a>
+                            <a class="btn btn-outline-light btn-sm fw-bold" asp-controller="Account" asp-action="ForgotPassword">
+                                <i class="bi bi-key-fill me-1"></i> Quên mật khẩu
+                            </a>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container flex-grow-1 d-flex flex-column justify-content-center">
+        <main role="main" class="w-100">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- NÚT GIỎ HÀNG CHỈ HIỆN KHI ĐÃ ĐĂNG NHẬP TÀI KHOẢN ĐỘC GIẢ -->
+    @if (isDocGia)
+    {
+        <div class="position-fixed end-0 p-3" style="bottom: 60px; z-index: 1050;">
+            <a asp-controller="GioHang" asp-action="Index" class="btn btn-success text-white shadow-lg rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2">
+                <i class="bi bi-cart-check-fill fs-5"></i>
+                <span>Giỏ sách</span>
+            </a>
+        </div>
+    }
+
+    <!-- FOOTER CHĂM SÓC KHÁCH HÀNG -->
+    <footer class="footer text-muted bg-white text-center py-2 mt-auto w-100 border-top shadow-sm" style="font-size: 12px;">
         <div class="container">
-            &copy; 2026 - QuanLyThuVien_UNETI05_DHTI17A2ND - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div>
+                &copy; 2026 - <strong>QUẢN LÝ THƯ VIỆN UNETI</strong> | Nhóm 05 - Class DHTI17A2ND
+            </div>
+            <div class="mt-1 fw-bold text-dark">
+                <i class="bi bi-headset text-primary me-1"></i> Chăm sóc khách hàng — SĐT: <span class="text-danger me-3">0961860910</span> Email: <span class="text-primary">trungtamthuviennhom5@gmail.com</span>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

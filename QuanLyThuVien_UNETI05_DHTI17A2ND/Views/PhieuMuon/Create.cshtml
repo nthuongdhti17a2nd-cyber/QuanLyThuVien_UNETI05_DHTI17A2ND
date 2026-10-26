@@ -1,0 +1,133 @@
+﻿@* 
+Họ và tên: Nguyễn Trung Kiên
+Mã sinh viên: 23274800010
+Nội dung thực hiện: Giao diện Admin Lập Phiếu Mượn Sách Mới - Hỗ trợ thêm nhiều đầu sách cùng lúc trong 1 phiếu*@
+
+@model QuanLyThuVien_UNETI05_DHTI17A2ND.Models.PhieuMuon
+
+@{
+    ViewData["Title"] = "Lập Phiếu Mượn Sách Mới";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var danhSachSach = ViewBag.MaSach as Microsoft.AspNetCore.Mvc.Rendering.SelectList;
+}
+
+<div class="container my-5" style="max-width: 850px;">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="background: rgba(255, 255, 255, 0.98);">
+        <div class="card-header bg-info text-white text-center py-3 border-0">
+            <h3 class="fw-bold m-0 text-uppercase">
+                <i class="bi bi-journal-plus me-2"></i>LẬP PHIẾU MƯỢN SÁCH MỚI (TẠI QUẦY)
+            </h3>
+        </div>
+
+        <div class="card-body p-4">
+
+            <!-- BẢNG HIỂN THỊ THÔNG BÁO LỖI NẾU CÓ -->
+            <div asp-validation-summary="All" class="alert alert-danger fw-bold rounded-3 mb-4" style="display:@(ViewData.ModelState.IsValid ? "none" : "block")"></div>
+
+            <form asp-controller="PhieuMuon" asp-action="Create" method="post" id="formLapPhieu">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-dark fs-6">Chọn Độc giả <span class="text-danger">*</span></label>
+                    <select asp-for="MaDocGia" class="form-select rounded-3 py-2 fw-semibold" asp-items="ViewBag.MaDocGia" required>
+                        <option value="">-- Chọn độc giả mượn sách --</option>
+                    </select>
+                </div>
+
+                <hr class="text-muted my-4" />
+
+                <!-- DANH SÁCH CÁC ĐẦU SÁCH MƯỢN -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary m-0"><i class="bi bi-book-half me-2"></i>Danh sách sách mượn</h5>
+                    <button type="button" class="btn btn-sm btn-success fw-bold rounded-3 px-3" onclick="themDongSach()">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm sách khác
+                    </button>
+                </div>
+
+                <div id="containerSach" class="vstack gap-3 mb-4">
+                    <!-- Dòng sách mặc định đầu tiên -->
+                    <div class="row g-2 align-items-center p-3 border rounded-3 bg-light position-relative dong-sach">
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold small text-dark">Chọn Sách:</label>
+                            <select name="danhSachSachId" class="form-select rounded-3 py-2" required>
+                                <option value="">-- Chọn sách --</option>
+                                @if (danhSachSach != null)
+                                {
+                                    foreach (var item in danhSachSach)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold small text-dark">Số lượng:</label>
+                            <input type="number" name="danhSachSoLuong" value="1" min="1" class="form-control rounded-3 py-2 fw-bold text-success text-center" required />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small text-dark">Hẹn trả:</label>
+                            <select name="danhSachNgayHenTra" class="form-select rounded-3 py-2 text-danger fw-bold" required>
+                                @for (int i = 1; i <= 14; i++)
+                                {
+                                    var ngayHen = DateTime.Now.AddDays(i);
+                                    <option value="@ngayHen.ToString("yyyy-MM-dd")" selected="@(i == 14)">
+                                        @ngayHen.ToString("dd/MM/yyyy") (@i ngày)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-1 text-center pt-4">
+                            <button type="button" class="btn btn-outline-danger btn-sm rounded-3 mt-1" onclick="xoaDongSach(this)" title="Xóa sách này">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-dark">Ghi chú chung cho phiếu</label>
+                    <input asp-for="GhiChu" class="form-control rounded-3 py-2" placeholder="Nhập ghi chú (nếu có)..." />
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <a asp-action="Index" class="btn btn-secondary fw-bold rounded-3 px-4 py-2">
+                        <i class="bi bi-arrow-left me-1"></i>Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-info text-white fw-bold rounded-3 px-4 py-2 shadow">
+                        <i class="bi bi-check-circle-fill me-1"></i>Xác nhận cho mượn
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function themDongSach() {
+            var container = document.getElementById("containerSach");
+            var dongDauTien = container.querySelector(".dong-sach");
+            var dongMoi = dongDauTien.cloneNode(true);
+
+            dongMoi.querySelector("select[name='danhSachSachId']").value = "";
+            dongMoi.querySelector("input[name='danhSachSoLuong']").value = "1";
+            dongMoi.querySelector("select[name='danhSachNgayHenTra']").selectedIndex = 13;
+
+            container.appendChild(dongMoi);
+        }
+
+        function xoaDongSach(btn) {
+            var container = document.getElementById("containerSach");
+            var danhSachDong = container.getElementsByClassName("dong-sach");
+            
+            if (danhSachDong.length > 1) {
+                btn.closest(".dong-sach").remove();
+            } else {
+                alert("Phiếu mượn phải có ít nhất một cuốn sách!");
+            }
+        }
+    </script>
+}

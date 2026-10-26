@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace QUANLYTHUVIEN_UNETI_Nhom05__DHTI17A2ND.Services
+namespace QuanLyThuVien_UNETI05_DHTI17A2ND.Services
 {
     public class EmailService
     {
