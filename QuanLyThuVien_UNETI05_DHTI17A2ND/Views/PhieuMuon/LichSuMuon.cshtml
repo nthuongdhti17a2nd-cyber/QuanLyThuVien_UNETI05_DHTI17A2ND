@@ -1,0 +1,161 @@
+﻿@* 
+// Họ và tên: Nguyễn Thị Hương
+// Mã sinh viên: 23103100067
+// Nội dung thực hiện: Xây dựng Controller Dashboard Quản trị, Phân hệ Quản lý mượn trả sách (Duyệt đơn, Trả sách, Hủy phiếu) và Thống kê báo cáo dữ liệu.*@
+
+@model IEnumerable<QuanLyThuVien_UNETI05_DHTI17A2ND.Models.PhieuMuon>
+
+@{
+    ViewData["Title"] = "Lịch sử mượn & mua sách";
+}
+
+<div class="container my-4">
+    <!-- TIÊU ĐỀ NỔI BẬT TRÊN NỀN TRẮNG CÓ NÚT QUAY LẠI TRANG CHỦ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            @if (Context.Session.GetString("VaiTro") == "Admin" || Context.Session.GetString("TenDangNhap") == "admin")
+            {
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Trang quản trị
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary fw-bold shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Trang chủ
+                </a>
+            }
+            <div class="card shadow-sm px-4 py-2 border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+                <h2 class="m-0 text-primary fw-bold">
+                    <i class="bi bi-clock-history me-2"></i>LỊCH SỬ MƯỢN & MUA SÁCH
+                </h2>
+            </div>
+        </div>
+
+        <a asp-controller="Sach" asp-action="Index" class="btn btn-primary fw-bold shadow-sm">
+            <i class="bi bi-search me-1"></i> Tiếp tục tìm sách
+        </a>
+    </div>
+
+    <!-- BẢNG LỊCH SỬ MƯỢN TRẢ -->
+    <div class="table-responsive card shadow-lg border-0 rounded-3" style="background: rgba(255, 255, 255, 0.95);">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary text-center align-middle">
+                <tr>
+                    <th style="width: 10%;">Mã Phiếu</th>
+                    <th style="width: 25%;">Tên Sách</th>
+                    <th style="width: 12%;">Ngày Đăng Ký</th>
+                    <th style="width: 12%;">Hẹn Trả</th>
+                    <th style="width: 13%;">Trạng Thái</th>
+                    <th style="width: 15%;">Ghi Chú</th>
+                    <th style="width: 13%;">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        bool isMuaSach = (item.GhiChu != null && item.GhiChu.ToLower().Contains("mua")) || item.TrangThai == "Đã mua";
+
+                        <tr>
+                            <td class="text-center fw-bold text-primary">PM-@item.MaPhieuMuon</td>
+                            <td class="fw-bold text-dark">
+                                @if (item.ChiTietPhieuMuons != null && item.ChiTietPhieuMuons.Any())
+                                {
+                                    <ul class="mb-0 ps-3">
+                                        @foreach (var ct in item.ChiTietPhieuMuons)
+                                        {
+                                            <li><span>@(ct.Sach?.TenSach ?? "Sách không tồn tại")</span> (SL: @ct.SoLuong)</li>
+                                        }
+                                    </ul>
+                                }
+                                else if (item.Sach != null)
+                                {
+                                    <span>@item.Sach.TenSach</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Sách không tồn tại</span>
+                                }
+                            </td>
+                            <td class="text-center">@item.NgayMuon.ToString("dd/MM/yyyy")</td>
+
+                            <!-- BỎ NGÀY HẸN TRẢ NẾU LÀ ĐƠN MUA SÁCH -->
+                            <td class="text-center">
+                                @if (isMuaSach)
+                                {
+                                    <span class="text-muted fw-bold" title="Mua sách không áp dụng hạn trả">—</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger fw-bold">@item.NgayHenTra.ToString("dd/MM/yyyy")</span>
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                @if (item.TrangThai == "Đã trả" || item.TrangThai == "Đã mua")
+                                {
+                                    <span class="badge bg-success px-3 py-2">@item.TrangThai</span>
+                                }
+                                else if (item.TrangThai == "Đang mượn")
+                                {
+                                    <span class="badge bg-primary px-3 py-2">@item.TrangThai</span>
+                                }
+                                else if (item.TrangThai == "Chờ xác nhận")
+                                {
+                                    <span class="badge bg-info text-dark px-3 py-2">Chờ xác nhận</span>
+                                }
+                                else if (item.TrangThai == "Đã hủy")
+                                {
+                                    <span class="badge bg-danger px-3 py-2">Đã hủy</span>
+                                }
+                            </td>
+                            <td class="text-center text-muted small">@(string.IsNullOrEmpty(item.GhiChu) ? "-" : item.GhiChu)</td>
+
+                            <!-- CỘT THAO TÁC (XEM, HỦY, XÓA) -->
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <!-- Nút Xem -->
+                                    <a asp-action="Details" asp-route-id="@item.MaPhieuMuon" class="btn btn-sm btn-outline-info fw-bold" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i> Xem
+                                    </a>
+
+                                    <!-- Nút Hủy (Chỉ hiện khi Chờ xác nhận hoặc Đang mượn) -->
+                                    @if (item.TrangThai == "Chờ xác nhận" || item.TrangThai == "Đang mượn")
+                                    {
+                                        <form asp-action="HuyPhieu" asp-route-id="@item.MaPhieuMuon" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn HỦY phiếu mượn/mua này?');" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-warning text-dark fw-bold" title="Hủy yêu cầu">
+                                                <i class="bi bi-x-circle"></i> Hủy
+                                            </button>
+                                        </form>
+                                    }
+
+                                    <!-- Nút Xóa (Chỉ hiện khi Đã trả, Đã mua hoặc Đã hủy) -->
+                                    @if (item.TrangThai == "Đã trả" || item.TrangThai == "Đã mua" || item.TrangThai == "Đã hủy")
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@item.MaPhieuMuon" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn XÓA lịch sử phiếu này không?');" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-bold" title="Xóa lịch sử">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted fs-6">
+                            Bạn chưa tạo phiếu mượn hay mua sách nào.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
